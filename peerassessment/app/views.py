@@ -13,11 +13,11 @@ logger = logging.getLogger(__name__)
 # Endpoints frmo here and below are used for GET requests
 # All these endpoints should render a HTML template for display
 
-"""
-    Index endpoint.
-    This is the base endpoint of the page.
-"""
 def index(request):
+    """ Index endpoint.
+
+        This is the base endpoint of the page.
+    """
     template = { 'complement' : 'World', 'student_count' : len(Student.objects.all()) }
     return render_to_response("index.html", template)
 
@@ -28,17 +28,18 @@ def index(request):
 # They do not render any HTML but work like a REST API.
 # Receiving content as JSON and replying with JSON content and HTTP Codes.
 
-"""
-    Register endpoint.
-    This method register a new user from a HTTP POST Request.
-    The content of this request should be a json formatted as:
-    { "name" : "user name" , "login" : "user login", "password" : "user password" }
-
-    Returns:
-    HTTP Code 200: Id of the User
-    HTTP Code 400: E-mail already in use or other exception
-"""
 def register(request):
+    """
+        Register endpoint.
+
+        This method register a new user from a HTTP POST Request.
+        The content of this request should be a json formatted as:
+        { "name" : "user name" , "login" : "user login", "password" : "user password" }
+
+        Returns:
+        HTTP Code 200: Id of the User
+        HTTP Code 400: E-mail already in use or other exception
+    """
     if (request.method != "POST"):
         return HttpResponse("Method Not Allowed", status=405)
     try:
