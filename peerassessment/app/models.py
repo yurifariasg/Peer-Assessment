@@ -8,7 +8,7 @@ from django.db import models
     It is used to enable authentication of a user in the system.
 """
 class Credential(models.Model):
-    login = models.CharField(max_length=100)
+    login = models.CharField(max_length=100, unique=True)
     password = models.CharField(max_length=100)
 
 """
