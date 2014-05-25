@@ -8,6 +8,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
+import sys
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -41,10 +43,15 @@ INSTALLED_APPS = (
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # We disabled the Csrf Middleware to easily use AJAX Requests
+    # This shall be enabled later on to avoid Cross-site request forgery
+    # This has been registered as Issue #8
+    # https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
+    #'django.middleware.csrf.CsrfViewMiddleware',
 )
 
 ROOT_URLCONF = 'peerassessment.urls'
@@ -59,6 +66,37 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+# Logging configuration
+# https://docs.djangoproject.com/en/dev/topics/logging/
+# This is a simple Debug logging configuration
+# It shall be used like: logger.debug(debug info)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console':{
+            'level': 'DEBUG',
+            'class':'logging.StreamHandler',
+            'stream': sys.stdout,
+            'formatter': 'simple'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'filters': [],
+            'propagate': True,
+            'level': 'DEBUG',
+        }
     }
 }
 

@@ -6,7 +6,10 @@ import app
 
 urlpatterns = patterns('',
     # Place routes here
+    url(r'^register$', 'app.views.register'),
     url(r'^$', 'app.views.index'),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()
+
+
