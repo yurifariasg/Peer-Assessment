@@ -5,6 +5,9 @@ from models import *
 import json
 import logging
 from django.db import *
+from django.core.exceptions import ValidationError
+from django.forms.models import model_to_dict
+from status import *
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -31,33 +34,51 @@ def index(request):
 def register(request):
     """
         Register endpoint.
-
+        
         This method register a new user from a HTTP POST Request.
         The content of this request should be a json formatted as:
-        { "name" : "user name" , "login" : "user login", "password" : "user password" }
+        { "name" : "user name" , "email" : "user email",
+        "password" : "user password", "type" : "student" }
 
         Returns:
-        HTTP Code 200: Id of the User
-        HTTP Code 400: E-mail already in use or other exception
+        HTTP Code 200: The created user
+        HTTP Code 400: JSON containing the invalid parameters
     """
     if (request.method != "POST"):
-        return HttpResponse("Method Not Allowed", status=405)
+        return HttpResponse("Method Not Allowed", status = HTTP_405_METHOD_NOT_ALLOWED)
     try:
         jsonBody = json.loads(request.body)
 
         name = jsonBody.get("name")
-        login = jsonBody.get("login")
+        email = jsonBody.get("email")
         password = jsonBody.get("password") # TODO: Should encrypt
+        userType = jsonBody.get("type")
 
-        credential = Credential.objects.create(login = login, password = password)
-        student = Student.objects.create(name = name, credential = credential)
+        credential = Credential(email = email, password = password)
+        credential.full_clean()
+        credential.save()
 
-        if credential.id != None and student.id != None:
-            return HttpResponse(student.id, status=200)
+        try:
+            user = None
+            if userType != None and userType.lower() == "student":
+                user = Student(name = name, credential = credential)
+            elif userType != None and userType.lower() == "professor":
+                user = Professor(name = name, credential = credential)
+            else:
+                raise ValidationError({"type": ["type not found"]})
 
-    except IntegrityError as e:
-        return HttpResponse("E-mail already in use", status=400)
+            if user != None:
+                user.full_clean()
+                user.save()
+                return HttpResponse(str(user), status = HTTP_201_CREATED)
+
+        except Exception as e:
+            # In case we fail to create the student. Delete credentials.
+            credential.delete()
+            raise e # Re-throw the exception
+
+    except ValidationError as e:
+        return HttpResponse(json.dumps(e.message_dict), status = HTTP_400_BAD_REQUEST)
     except Exception as e:
-        logger.debug(e)
-        pass
-    return HttpResponse("Bad Request", status=400)
+        return HttpResponse(json.dumps({"error" : e.message}))
+    return HttpResponse("{}", status = HTTP_400_BAD_REQUEST)

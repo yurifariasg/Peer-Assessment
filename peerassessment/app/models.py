@@ -1,4 +1,6 @@
 from django.db import models
+import json
+from django.core.exceptions import ValidationError
 
 # Place our models here
 
@@ -7,8 +9,13 @@ class Credential(models.Model):
         This class holds information to authenticate a user.
         It is used to enable authentication of a user in the system.
     """
-    login = models.CharField(max_length=100, unique=True)
+    email = models.EmailField(max_length=100, unique=True)
     password = models.CharField(max_length=100)
+
+    def clean(self):
+        # Don't allow users with less than 3 characters on their name
+        if self.password == None or len(self.password) <= 3:
+            raise ValidationError({"password": ['This field has less than 3 characters.']})
 
 
 class User(models.Model):
@@ -18,6 +25,11 @@ class User(models.Model):
     """
     name = models.CharField(max_length=100)
     credential = models.ForeignKey('Credential')
+
+    def clean(self):
+        # Don't allow users with less than 3 characters on their name
+        if self.name == None or len(self.name) <= 3:
+            raise ValidationError({"name": ['This field has less than 3 characters.']})
 
     class Meta:
         abstract = True
@@ -47,6 +59,8 @@ class Student(User):
     """
     assignments = models.ManyToManyField('Assignment')
 
+    def __str__(self):
+        return json.dumps({ "id" : self.id, "name" : self.name })
 
 class Professor(User):
     """
