@@ -9,6 +9,8 @@
   <title>Login - Peer Assessment</title>
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}" media="screen" type="text/css" />
+    <script src="{% static 'js/jquery-1.11.1.js' %}"></script>
+    <script src="{% static 'js/index.js' %}"></script>
 
 </head>
 
@@ -35,12 +37,12 @@
         
         <h1 class="titlelogin"> Peer Assessment <h1> <br> 
 
-        <form action="javascript:void(0);" method="get">
+        <form action="javascript:login();" method="get">
 
             <fieldset class="clearfix">
         
-                <p><span class="fontawesome-user"></span><input type="text" value="Email" onBlur="if(this.value == '') this.value = 'Email'" onFocus="if(this.value == 'Email') this.value = ''" required></p> <!-- JS because of IE support; better: placeholder="Email" -->
-                <p><span class="fontawesome-lock"></span><input type="password"  value="Password" onBlur="if(this.value == '') this.value = 'Password'" onFocus="if(this.value == 'Password') this.value = ''" required></p> <!-- JS because of IE support; better: placeholder="Password" -->
+                <p><span class="fontawesome-user"></span><input id="email_field" type="text" value="Email" onBlur="if(this.value == '') this.value = 'Email'" onFocus="if(this.value == 'Email') this.value = ''" required/></p> <!-- JS because of IE support; better: placeholder="Email" -->
+                <p><span class="fontawesome-lock"></span><input  id="password_field" type="password"  value="Password" onBlur="if(this.value == '') this.value = 'Password'" onFocus="if(this.value == 'Password') this.value = ''" required/></p> <!-- JS because of IE support; better: placeholder="Password" -->
                 <p><input type="submit" value="Log In"></p>
 
             </fieldset>
