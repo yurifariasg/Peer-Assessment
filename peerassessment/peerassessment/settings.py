@@ -54,10 +54,17 @@ MIDDLEWARE_CLASSES = (
     #'django.middleware.csrf.CsrfViewMiddleware',
 )
 
+LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = "/"
+LOGOUT_URL = "/logout"
+
 ROOT_URLCONF = 'peerassessment.urls'
 
 WSGI_APPLICATION = 'peerassessment.wsgi.application'
 
+AUTHENTICATION_BACKENDS = (
+    'app.backends.EmailAuthBackend',
+)
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
