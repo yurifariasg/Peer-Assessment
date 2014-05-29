@@ -6,9 +6,9 @@ function login() {
 	var content = JSON.stringify({ "email" : email, "password" : password });
 
 	$.post("login", content,
-	 function( data ) {
+	 function( data, txtStatus, xhr ) {
 		// Sucessful!
-		window.location.href = "http://localhost:8000/student/";
+		window.location = JSON.parse(data).url;
 	})
 	.fail(function(data, txtStatus, xhr) {
 		console.log("fail: " + data.responseText);

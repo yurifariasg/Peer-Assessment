@@ -5,10 +5,22 @@ from django.contrib.auth.models import User
 
 # Place our models here
 
-class Person(models.Model):
+class PAModel(models.Model):
+
+    def try_delete():
+        try:
+            self.delete()
+        except:
+            pass
+
+    class Meta:
+        abstract = True
+
+
+class Person(PAModel):
     """
         This class holds common information regarding a simple person.
-        This class cannot be instanciated and it is used to hold common information.
+        It cannot be instanciated and is used to hold common information.
     """
     user = models.OneToOneField(User, primary_key=True) # Credential
 
@@ -23,19 +35,66 @@ class Person(models.Model):
         abstract = True
 
 
-class AssignmentStage(models.Model):
+class AssignmentStage(PAModel):
     """
         This class holds information regarding the stage of an assignment.
     """
-    name = models.CharField(max_length=100)
+    STAGES = (
+        ('Submission', 'Submission'),
+        ('Discussion', 'Discussion'),
+        ('Grading', 'Grading'),
+        ('Closed', 'Closed'),
+    )
 
+    name = models.CharField(max_length=10, choices=STAGES)
+    assignment = models.ForeignKey('Assignment')
+    end_date = models.DateTimeField()
 
-class Assignment(models.Model):
+class Submission(PAModel):
+    """
+        This class holds information regarding a student submission.
+    """
+    student = models.OneToOneField('Student')
+    stage = models.ForeignKey('AssignmentStage')
+    url = models.URLField(max_length=200)
+
+class AssignmentCriteria(PAModel):
+    """
+        This class holds information regarding a student submission.
+    """
+    text = models.CharField(max_length=500)
+    assignment = models.ForeignKey('Assignment')
+    weight = models.FloatField()
+
+class Message(PAModel):
+    """
+        This class holds information regarding student message on
+        the discussion assignment stage.
+    """
+    date = models.DateTimeField(auto_now = True)
+    owner = models.ForeignKey('Student', related_name="received_messages")
+    recipient = models.ForeignKey('Student', related_name="sent_messages")
+    criteria = models.ForeignKey('AssignmentCriteria')
+    stage = models.ForeignKey('AssignmentStage')
+    text = models.CharField(max_length=500)
+
+class Grade(PAModel):
+    """
+        This class holds information regarding a grade on
+        the grading assignment stage.
+    """
+    grade = models.FloatField()
+    stage = models.ForeignKey('AssignmentStage')
+    owner = models.ForeignKey('Student', related_name="sent_grades")
+    student = models.ForeignKey('Student', related_name="received_grades")
+    criteria = models.ForeignKey('AssignmentCriteria')
+
+class Assignment(PAModel):
     """
         This class holds information regarding an assignment to be sent to students.
         It is used to hold grades, students and the professor who created it.
     """
-    stage = models.ManyToManyField('AssignmentStage')
+    name = models.CharField(max_length=500)
     owner = models.ForeignKey('Professor')
     students = models.ManyToManyField('Student')
 
@@ -48,7 +107,10 @@ class Student(Person):
     assignments = models.ManyToManyField('Assignment')
 
     def __str__(self):
-        return json.dumps({ "email" : self.user.email, "name" : self.user.username })
+        return json.dumps({ "email" : self.user.email, "name" : self.user.username, "type" : self.getType() })
+
+    def getType(self):
+        return "student"
 
 class Professor(Person):
     """
@@ -56,3 +118,6 @@ class Professor(Person):
         It is used to identify a single professor in the system.
     """
     owned_assignments = models.ManyToManyField('Assignment')
+
+    def getType(self):
+        return "professor"

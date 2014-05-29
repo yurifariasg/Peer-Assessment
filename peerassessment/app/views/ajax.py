@@ -1,85 +1,32 @@
-from django.shortcuts import render
-from django.shortcuts import render_to_response
-from django.http import HttpResponse
-from models import *
-import json
-import logging
-from django.db import *
-from django.core.exceptions import ValidationError
-from django.forms.models import model_to_dict
-from status import *
-from django.contrib.auth.models import User
-from django.contrib.auth import login, logout, authenticate
-from exceptions import *
-from django.contrib.auth.hashers  import *
-from django.contrib.auth.decorators import login_required
-
-# Get an instance of a logger
-logger = logging.getLogger(__name__)
-
-
-# View Decorators
-# Functions here are usesul as decorator for the endpoints below
-# They perform useful tasks that are common to several endpoints
-
-def ajax_endpoint(func):
-    def func_wrapper(*args, **kwargs):
-        try:
-            result = func(*args, **kwargs)
-            return HttpResponse(json.dumps(result), status = HTTP_200_OK)
-        except MethodNotAllowedException as e:
-            return HttpResponse(status = HTTP_405_METHOD_NOT_ALLOWED)
-        except ValidationError as e:
-            return HttpResponse(json.dumps(e.message_dict), status = HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            return HttpResponse(json.dumps({"error" : e.message}))
-    return func_wrapper
-
-# View Endpoints
-# Endpoints from here and below are used for GET requests
-# All these endpoints should render a HTML template for display
-
-def index(request):
-    """ Index endpoint.
-
-        This is the base endpoint of the page.
-    """
-    return render_to_response("index.html")
-
-
-@login_required()
-def student_dashboard(request):
-    return HttpResponse("You are authenticated as " + str(request.user.student))
-
+from common import *
+from html import *
 
 # AJAX Endpoints
-# Endpoints from here and below are used from AJAX-like requests
+# This file holds commons endspoints for AJAX-like requests
 # They do not render any HTML but work like a REST API.
 # Receiving content as JSON and replying with JSON content and HTTP Codes.
 
+@require_http_methods(["POST"])
 @ajax_endpoint
 def register(request):
     """
         Register endpoint.
-        
+
         This method register a new user from a HTTP POST Request.
         The content of this request should be a json formatted as:
         { "name" : "user name" , "email" : "user email",
         "password" : "user password", "type" : "student" }
 
         Returns:
-        HTTP Code 201: The created user
+        HTTP Code 200: The created user
         HTTP Code 400: JSON containing the invalid parameters
     """
-    if (request.method != "POST"):
-        raise MethodNotAllowedException()
+    json_body = json.loads(request.body)
 
-    jsonBody = json.loads(request.body)
-
-    name = jsonBody.get("name")
-    email = jsonBody.get("email")
-    password = jsonBody.get("password")
-    userType = jsonBody.get("type")
+    name = json_body.get("name")
+    email = json_body.get("email")
+    password = json_body.get("password")
+    userType = json_body.get("type")
 
     if len(password) < 8:
         raise ValidationError({"password": ["password has less than 8 characters."]})
@@ -100,7 +47,7 @@ def register(request):
         if person != None:
             person.full_clean()
             person.save()
-            return HttpResponse(str(person), status = HTTP_201_CREATED)
+            return { "user" : str(person) }
 
     except Exception as e:
         # In case we fail to create the student. Delete credentials.
@@ -111,7 +58,7 @@ def register(request):
 def logout_user(request):
     """
         Logout endpoint.
-        
+
         This method logs a user out of the current session.
 
         Returns:
@@ -124,11 +71,12 @@ def logout_user(request):
     else:
         raise BadRequestException({"error": ["user not logged."]})
 
+@require_http_methods(["POST"])
 @ajax_endpoint
 def login_user(request):
     """
         Login endpoint.
-        
+
         This method authenticates a user from a HTTP POST Request
         and saves its id on the current session.
         The content of this request should be a json formatted as:
@@ -138,20 +86,24 @@ def login_user(request):
         HTTP Code 200: The logged user
         HTTP Code 400: JSON containing the invalid parameters
     """
-    if (request.method != "POST"):
-        raise MethodNotAllowedException()
+    json_body = json.loads(request.body)
 
-    jsonBody = json.loads(request.body)
-
-    email = jsonBody.get("email")
-    password = jsonBody.get("password")
+    email = json_body.get("email")
+    password = json_body.get("password")
 
     logged_user = authenticate(email=email, password=password)
     if logged_user is not None:
         if logged_user.is_active:
             login(request, logged_user)
             # Redirect to a success page.
-            return {"user" : str(logged_user)}
+
+            url = ""
+            if hasattr(logged_user, 'student'):
+                url = reverse(student_dashboard)
+            elif hasattr(logged_user, "professor"):
+                url = reverse(professor_dashboard)
+
+            return {"url" : url, "session_id" : request.session._session_key}
         else:
             # Return a 'disabled account' error message
             raise BadRequestException({"error": ["disabled account."]})
