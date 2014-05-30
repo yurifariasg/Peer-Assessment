@@ -2,7 +2,6 @@ from common import *
 
 # Endpoints here are related to assignments.
 
-
 @require_http_methods(["POST"])
 @login_required_ajax()
 @types_required(["professor"])
@@ -13,8 +12,18 @@ def create(request):
          The API shall receive the name of the assignment,
          the end date for each stage: Submission, Discussion,
          Grading, the criterias and their weight in the final grade.
+         The content should be a json in the following format:
+         {
+             "name" : "Assignment Name",
+             "submission_end_date" : "Y-m-dTH:M:S",
+             "discussion_end_date" : "Y-m-dTH:M:S",
+             "grading_end_date" : "Y-m-dTH:M:S",
+             "criterias" : [
+                 {"name" : "Criteria Name", "weight" : 1.0}
+             ]
+         }
+         Criterias weight must sum to 1.0.
     """
-
     json_body = json.loads(request.body)
 
     def get_date(parameter):
