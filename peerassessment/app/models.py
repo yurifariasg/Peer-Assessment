@@ -54,9 +54,12 @@ class Submission(PAModel):
     """
         This class holds information regarding a student submission.
     """
-    student = models.OneToOneField('Student')
-    stage = models.ForeignKey('AssignmentStage')
+    student = models.ForeignKey('Student')
+    assignment = models.ForeignKey('Assignment')
     url = models.URLField(max_length=200)
+
+    class Meta:
+        unique_together = (("student","assignment"),)
 
 class AssignmentCriteria(PAModel):
     """

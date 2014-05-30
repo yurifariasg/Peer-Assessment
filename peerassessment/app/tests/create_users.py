@@ -20,7 +20,11 @@ PROFESSOR_CREDENTIALS = {
 
 # Create a student
 
-result = requests.post(BASE_URL + "/register", data= json.dumps(STUDENT_CREDENTIALS))
-assert(result.status_code == 200)
-result = requests.post(BASE_URL + "/register", data= json.dumps(PROFESSOR_CREDENTIALS))
-assert(result.status_code == 200)
+def test():
+	result = requests.post(BASE_URL + "/register", data= json.dumps(STUDENT_CREDENTIALS))
+	assert(result.status_code == 200)
+	result = requests.post(BASE_URL + "/register", data= json.dumps(PROFESSOR_CREDENTIALS))
+	assert(result.status_code == 200)
+
+if __name__ == "__main__":
+	test()

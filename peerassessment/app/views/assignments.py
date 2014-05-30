@@ -4,6 +4,46 @@ from common import *
 
 @require_http_methods(["POST"])
 @login_required_ajax()
+@types_required(["student"])
+@ajax_endpoint
+def submit(request):
+    """
+        Submits an assignment.
+        This API shall receive the URL from a student for a open assignment.
+        The JSON content should have the following format:
+        {
+            "url" : "a valid url",
+            "assignment_id" : "the assignment id"
+        }
+    """
+    json_body = json.loads(request.body)
+
+    url = json_body.get("url")
+    assignment_id = json_body.get("assignment_id")
+
+    if not url:
+        raise ValidationError({"url" : ["Field cannot be blank."]})
+    if not assignment_id:
+        raise ValidationError({"assignment_id" : ["Field cannot be blank."]})
+
+    try:
+        assignment = Assignment.objects.get(pk=assignment_id)
+    except:
+        raise ValidationError({"assignment_id" : ["Not found."]})
+
+    submission = Submission( \
+        student = request.user.student, \
+        assignment = assignment, \
+        url = url \
+        )
+
+    submission.full_clean()
+    submission.save()
+
+    return { }
+
+@require_http_methods(["POST"])
+@login_required_ajax()
 @types_required(["professor"])
 @ajax_endpoint
 def create(request):
