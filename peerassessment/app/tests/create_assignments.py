@@ -16,9 +16,9 @@ def test():
 
     content = {
         "name" : "New Assignment",
-        "submission_end_date" : createDate(1),
-        "discussion_end_date" : createDate(2),
-        "grading_end_date" : createDate(3),
+        "submission_end_date" : createDate(0),
+        "discussion_end_date" : createDate(1),
+        "grading_end_date" : createDate(2),
         "criterias" : [
             {"name" : "Hello Criteria", "weight" : 1.0}
         ]

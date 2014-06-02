@@ -34,22 +34,6 @@ class Person(PAModel):
     class Meta:
         abstract = True
 
-
-class AssignmentStage(PAModel):
-    """
-        This class holds information regarding the stage of an assignment.
-    """
-    STAGES = (
-        ('Submission', 'Submission'),
-        ('Discussion', 'Discussion'),
-        ('Grading', 'Grading'),
-        ('Closed', 'Closed'),
-    )
-
-    name = models.CharField(max_length=10, choices=STAGES)
-    assignment = models.ForeignKey('Assignment')
-    end_date = models.DateTimeField()
-
 class Submission(PAModel):
     """
         This class holds information regarding a student submission.
@@ -71,23 +55,21 @@ class AssignmentCriteria(PAModel):
 
 class Message(PAModel):
     """
-        This class holds information regarding student message on
-        the discussion assignment stage.
+        This class holds information regarding student message on an assignment.
     """
     date = models.DateTimeField(auto_now = True)
     owner = models.ForeignKey('Student', related_name="received_messages")
     recipient = models.ForeignKey('Student', related_name="sent_messages")
     criteria = models.ForeignKey('AssignmentCriteria')
-    stage = models.ForeignKey('AssignmentStage')
+    assignment = models.ForeignKey('Assignment')
     text = models.CharField(max_length=500)
 
 class Grade(PAModel):
     """
-        This class holds information regarding a grade on
-        the grading assignment stage.
+        This class holds information regarding a grade on an assignment.
     """
     grade = models.FloatField()
-    stage = models.ForeignKey('AssignmentStage')
+    assignment = models.ForeignKey('Assignment')
     owner = models.ForeignKey('Student', related_name="sent_grades")
     student = models.ForeignKey('Student', related_name="received_grades")
     criteria = models.ForeignKey('AssignmentCriteria')
@@ -97,9 +79,33 @@ class Assignment(PAModel):
         This class holds information regarding an assignment to be sent to students.
         It is used to hold grades, students and the professor who created it.
     """
+    STAGES = (
+        ('Submission', 'Submission'),
+        ('Discussion', 'Discussion'),
+        ('Grading', 'Grading'),
+        ('Closed', 'Closed'),
+    )
+
     name = models.CharField(max_length=500)
+    stage = models.CharField(max_length=10, choices=STAGES, default='Submission')
+
+    submission_end_date = models.DateTimeField()
+    discussion_end_date = models.DateTimeField()
+    grading_end_date = models.DateTimeField()
+
     owner = models.ForeignKey('Professor')
-    students = models.ManyToManyField('Student')
+    participants = models.ManyToManyField('Student')
+
+class Allocation(PAModel):
+    """
+        This class holds information regarding a student's allocation in an assignment.
+    """
+    student = models.ForeignKey('Student')
+
+    peer1 = models.ForeignKey('Student', related_name="+")
+    peer2 = models.ForeignKey('Student', related_name="+")
+    peer3 = models.ForeignKey('Student', related_name="+")
+    peer4 = models.ForeignKey('Student', related_name="+")
 
 
 class Student(Person):

@@ -26,5 +26,18 @@ def test():
 	result = requests.post(BASE_URL + "/register", data= json.dumps(PROFESSOR_CREDENTIALS))
 	assert(result.status_code == 200)
 
+	# Now, let create several students
+	for i in range(20):
+
+		credentials = {
+			"name" : "student" + str(i),
+			"password" : "12345678",
+			"email" : "student" + str(i) + "@mail.com",
+			"type" : "student"
+		}
+
+		result = requests.post(BASE_URL + "/register", data= json.dumps(credentials))
+		assert(result.status_code == 200)
+
 if __name__ == "__main__":
 	test()

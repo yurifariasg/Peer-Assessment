@@ -1,4 +1,5 @@
 from apscheduler.scheduler import Scheduler
+import assignment_updater as AssignmentUpdater
 
 class JobManager(object):
     """
@@ -6,7 +7,7 @@ class JobManager(object):
     """
     is_running = False
     sched = Scheduler()
-    
+
     @classmethod
     def start(cls):
         if cls.is_running:
@@ -14,9 +15,10 @@ class JobManager(object):
         JobManager.is_running = True
         cls.sched.start()
 
-        @cls.sched.interval_schedule(hours=1)
+        @cls.sched.interval_schedule(seconds=10)
         def scheduled_job():
-            pass
+            print "Checking for Assignments that needs to be updated"
+            AssignmentUpdater.update_assignments()
 
     @classmethod
     def shutdown(cls): # Not being called

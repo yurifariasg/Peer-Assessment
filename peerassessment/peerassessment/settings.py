@@ -103,6 +103,12 @@ LOGGING = {
             'filters': [],
             'propagate': True,
             'level': 'DEBUG',
+        },
+        'apscheduler.scheduler': {
+            'handlers': ['console'],
+            'filters': [],
+            'propagate': True,
+            'level': 'DEBUG',
         }
     }
 }
