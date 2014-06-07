@@ -9,13 +9,8 @@
 
   <title>Login - Peer Assessment</title>
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" media="screen" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/index-style.css' %}" media="screen" type="text/css" />
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" media="screen" type="text/css" />
-    <script src="{% static 'js/jquery-1.11.1.js' %}"></script>
-    <script src="{% static 'js/index.js' %}"></script>
-    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
-    <!--<script src='http://codepen.io/assets/libs/fullpage/none.js'></script> -->
-
 </head>
 
 <body class="bg">
@@ -23,21 +18,34 @@
     <div class="container">
 
       <form class="form-signin" role="form">
-        <h2 class="form-signin-heading">Peer Assessment</h2>
-        <input type="email" class="form-control textview" placeholder="Email address" required="" autofocus="">
-        <input type="password" class="form-control textview" placeholder="Password" required="">
+        <div class="bottom-padding"> <h2 class="form-signin-heading">Peer Assessment</h2> </div>
+        <input id="email" type="email" class="form-control textview" placeholder="Email address" required="" autofocus="">
+        <input id="password" type="password" class="form-control textview" placeholder="Password" required="">
         <div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            <input  class="btn btn-lg btn-primary btn-block" type="button" onclick="login()" value="Sign in" />
+        </div>
+
+        <div class="top-padding">
+            <div class="alert alert-danger" style="display: none">
+                <strong>Oh não!</strong>
+                <p id="msg">
+                Senha ou login inválido(s)
+                </p>
+            </div>
         </div>
       </form>
 
+
     </div> <!-- /container -->
-
-
+    
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{% static 'js/jquery-1.11.1.js' %}"></script>
+    <script src="{% static 'js/index.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
   
 
 </body>
 </html>
+
