@@ -1,5 +1,6 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
+
 <html>
 
 <head>
@@ -9,55 +10,34 @@
   <title>Login - Peer Assessment</title>
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}" media="screen" type="text/css" />
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" media="screen" type="text/css" />
     <script src="{% static 'js/jquery-1.11.1.js' %}"></script>
     <script src="{% static 'js/index.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+    <!--<script src='http://codepen.io/assets/libs/fullpage/none.js'></script> -->
 
 </head>
 
-<body>
+<body class="bg">
 
-  <html lang="en-US">
-<head>
+    <div class="container">
 
-	<meta charset="utf-8">
+      <form class="form-signin" role="form">
+        <h2 class="form-signin-heading">Peer Assessment</h2>
+        <input type="email" class="form-control textview" placeholder="Email address" required="" autofocus="">
+        <input type="password" class="form-control textview" placeholder="Password" required="">
+        <div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        </div>
+      </form>
 
-	<title>Login</title>
+    </div> <!-- /container -->
 
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700">
 
-	<!--[if lt IE 9]>
-		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-
-</head>
-
-<body>
-
-    <div id="login">
-        
-        <h1 class="titlelogin"> Peer Assessment <h1> <br> 
-
-        <form action="javascript:login();" method="get">
-
-            <fieldset class="clearfix">
-        
-                <p><span class="fontawesome-user"></span><input id="email_field" type="text" value="Email" onBlur="if(this.value == '') this.value = 'Email'" onFocus="if(this.value == 'Email') this.value = ''" required/></p> <!-- JS because of IE support; better: placeholder="Email" -->
-                <p><span class="fontawesome-lock"></span><input  id="password_field" type="password"  value="Password" onBlur="if(this.value == '') this.value = 'Password'" onFocus="if(this.value == 'Password') this.value = ''" required/></p> <!-- JS because of IE support; better: placeholder="Password" -->
-                <p><input type="submit" value="Log In"></p>
-
-            </fieldset>
-
-        </form>
-
-        <p>Não tem cadastro? <a href="#"> Registre-se </a><span class="fontawesome-arrow-right"></span></p>
-
-    </div> <!-- end login -->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+  
 
 </body>
-</html>
-
-  <script src='http://codepen.io/assets/libs/fullpage/none.js'></script>
-
-</body>
-
 </html>

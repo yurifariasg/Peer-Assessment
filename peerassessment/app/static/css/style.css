@@ -1,124 +1,68 @@
-@charset "utf-8";
-/* CSS Document */
-
-/* ---------- FONTAWESOME ---------- */
-/* ---------- http://fortawesome.github.com/Font-Awesome/ ---------- */
-/* ---------- http://weloveiconfonts.com/ ---------- */
-
-@import url(http://weloveiconfonts.com/api/?family=fontawesome);
-
-/* ---------- ERIC MEYER'S RESET CSS ---------- */
-/* ---------- http://meyerweb.com/eric/tools/css/reset/ ---------- */
-
-@import url(http://meyerweb.com/eric/tools/css/reset/reset.css);
-
-/* ---------- FONTAWESOME ---------- */
-
-[class*="fontawesome-"]:before {
-  font-family: 'FontAwesome', sans-serif;
+.bg {
+padding-top: 40px;
+padding-bottom: 40px;
+background-color: #323d54;
 }
 
-/* ---------- GENERAL ---------- */
+.textview {
+
+}
 
 body {
-	background: #323d54;
-	color: #606468;
-  font: 87.5%/1.5em 'Open Sans', sans-serif;
-  margin: 0;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #eee;
 }
 
-a {
-	color: #eee;
-	font-weight: bold;
-	text-decoration: none;
+.form-signin {
+
+  max-width: 330px;
+  padding: 15px;
+
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+  text-align: center;
+  color: #e5e5e5;
+
+}
+.form-signin .checkbox {
+
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
-a:hover {
-	text-decoration: underline;
-}
 
-input {
-	border: none;
-	font-family: 'Open Sans', Arial, sans-serif;
-	font-size: 14px;
-	line-height: 1.5em;
-	padding: 0;
-	-webkit-appearance: none;
-}
-
-p {
-	color: #999;
-	line-height: 1.5em;
-}
-
-h1 {
-	font-size: 14px;
-	text-align: center;
-	color: #ccc;
-}
-
-.clearfix { *zoom: 1; } /* For IE 6/7 */
-.clearfix:before, .clearfix:after {
-	display: table;
-	content: "";
-}
-.clearfix:after { clear: both; }
-
-/* ---------- LOGIN ---------- */
-
-#login {
-	margin: 50px auto;
-	width: 280px;
-}
-
-#login form span {
-	background-color: #ccc;
-	border-radius: 3px 0px 0px 3px;
-	color: #606468;
-	display: block;
-	float: left;
-	height: 50px;
-	line-height: 50px;
-	text-align: center;
-	width: 50px;
-}
-
-#login form input {
-	height: 50px;
-}
-
-#login form input[type="text"], input[type="password"] {
-	background-color: #e5e5e5;
-	border-radius: 0px 3px 3px 0px;
-	color: #606468;
-	margin-bottom: 1em;
-	padding: 0 16px;
-	width: 198px;
-}
-
-#login form input[type="submit"] {
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	background-color: #3399cc;
-	color: #eee;
-	font-weight: bold;
-	margin-bottom: 2em;
-	text-transform: uppercase;
-	width: 280px;
-}
-
-#login form input[type="submit"]:hover {
-	background-color: #236b8e;
-}
-
-#login > p {
-	text-align: center;
-	font-weight: 100;
-  	background-color: #FFFFFF;
-  	font-size: 2.3em;
-}
-
-#login > p span {
-	padding-left: 5px;
+.authenty.signin-main input[type="text"],
+.authenty.signin-main input[type="password"] {
+  background-color: #404040;
+  padding-left: 20px;
+  border-radius: 0;
+  border: none;
+  margin-bottom: 10px;
+  color: #cccccc;
+  height: 43px;
 }
