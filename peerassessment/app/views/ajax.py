@@ -17,7 +17,7 @@ def register(request):
         { "firstname" : "first name" , "lastname" : "last name",
         "email" : "user email", "password" : "user password",
         "type" : "student" }
-        
+
         Returns:
         HTTP Code 200: The created user
         HTTP Code 400: JSON containing the invalid parameters
@@ -74,7 +74,7 @@ def logout_user(request):
     """
     if request.user.is_authenticated():
         logout(request)
-        return {}
+        return { "url" : reverse(index) }
     else:
         raise BadRequestException({"error": ["user not logged."]})
 

@@ -34,20 +34,20 @@
                     <div class="center-block activity-icon">
 
                         {% if assignment.stage == "Submission" %}
-                            <div class="round-icon submission-color">
-                                <i class="fa fa-arrow-circle-o-down"></i>
+                            <div class="assignment-round-icon submission-color">
+                                <i class="fa fa-arrow-circle-o-down assignment-icon-fa"></i>
                             </div>
                         {% elif assignment.stage == "Discussion" %}
-                            <div class="round-icon discussion-color">
-                                <i class="fa fa-comment-o"></i>
+                            <div class="assignment-round-icon discussion-color">
+                                <i class="fa fa-comment-o assignment-icon-fa"></i>
                             </div>
                         {% elif assignment.stage == "Grading" %}
-                            <div class="round-icon grading-color">
-                                <i class="fa fa-pencil"></i>
+                            <div class="assignment-round-icon grading-color">
+                                <i class="fa fa-pencil assignment-icon-fa"></i>
                             </div>
                         {% else %}
-                            <div class="round-icon closed-color">
-                                <i class="fa fa-lock"></i>
+                            <div class="assignment-round-icon closed-color">
+                                <i class="fa fa-lock assignment-icon-fa"></i>
                             </div>
                         {% endif %}
                     </div>
