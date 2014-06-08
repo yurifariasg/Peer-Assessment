@@ -30,6 +30,10 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+JOB_UPDATER_TIMER = 1
+if HEROKU:
+    JOB_UPDATER_TIMER = 10
+
 
 # Application definition
 

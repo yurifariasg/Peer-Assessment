@@ -32,4 +32,4 @@ $('#notification').click(function(event){
 $('#settings').click(function(event){
 	$("#notification").removeClass("open");
 	event.stopPropagation();
-})
+});

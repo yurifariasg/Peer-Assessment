@@ -35,11 +35,18 @@ def update_assignments():
     print str(len(needs_update_grading)) + " needs to update from grading"
 
     for assignment in needs_update_submission:
-
         # Should do the allocation
         allocate(assignment)
 
         assignment.stage = "Discussion"
+        assignment.save()
+
+    for assignment in needs_update_discussion:
+        assignment.stage = "Grading"
+        assignment.save()
+
+    for assignment in needs_update_grading:
+        assignment.stage = "Closed"
         assignment.save()
 
 def allocate(assignment):
@@ -78,21 +85,23 @@ def allocate(assignment):
             peer2 = participants[i - 1]
 
         if i + 1 >= len(participants):
-            peer3 = participants[i + 1 - len(participants)]
+            peer4 = participants[i + 1 - len(participants)]
         else:
-            peer3 = participants[i + 1]
+            peer4 = participants[i + 1]
 
         if i + 2 >= len(participants):
-            peer4 = participants[i + 2 - len(participants)]
+            peer5 = participants[i + 2 - len(participants)]
         else:
-            peer4 = participants[i + 2]
+            peer5 = participants[i + 2]
 
         allocations.append(Allocation( \
             student = participants[i], \
+            assignment = assignment, \
             peer1 = peer1, \
             peer2 = peer2, \
-            peer3 = peer3, \
-            peer4 = peer4 ) )
+            peer3 = participants[i], \
+            peer4 = peer4, \
+            peer5 = peer5 ) )
 
     for allocation in allocations:
         allocation.save()

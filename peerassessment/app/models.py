@@ -2,6 +2,7 @@ from django.db import models
 import json
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Place our models here
 
@@ -63,14 +64,14 @@ class Message(PAModel):
     owner = models.ForeignKey('Student', related_name="received_messages")
     recipient = models.ForeignKey('Student', related_name="sent_messages")
     criteria = models.ForeignKey('AssignmentCriteria')
-    assignment = models.ForeignKey('Assignment')
     text = models.CharField(max_length=500)
 
 class Grade(PAModel):
     """
         This class holds information regarding a grade on an assignment.
     """
-    grade = models.FloatField()
+    grade = models.FloatField( \
+        validators = [MinValueValidator(0.0), MaxValueValidator(10.0)])
     assignment = models.ForeignKey('Assignment')
     owner = models.ForeignKey('Student', related_name="sent_grades")
     student = models.ForeignKey('Student', related_name="received_grades")
@@ -103,11 +104,15 @@ class Allocation(PAModel):
     """
     student = models.ForeignKey('Student')
     assignment = models.ForeignKey('Assignment')
+
     peer1 = models.ForeignKey('Student', related_name="+")
     peer2 = models.ForeignKey('Student', related_name="+")
     peer3 = models.ForeignKey('Student', related_name="+")
     peer4 = models.ForeignKey('Student', related_name="+")
+    peer5 = models.ForeignKey('Student', related_name="+")
 
+    class Meta:
+        unique_together = (("student","assignment"),)
 
 class Student(Person):
     """
@@ -118,6 +123,9 @@ class Student(Person):
 
     def __str__(self):
         return json.dumps({ "email" : self.user.email, "name" : self.user.username, "type" : self.getType() })
+
+    def id(self):
+        return self.user.id
 
     def getType(self):
         return "student"
