@@ -30,4 +30,4 @@ def professor_dashboard(request):
     assignments = list(Assignment.objects.filter(owner = request.user.professor).all())
 
     return render_to_response("professor/index.html", \
-        {'user': request.user.username, 'assignments': assignments})
+        {'user': request.user, 'assignments': assignments})

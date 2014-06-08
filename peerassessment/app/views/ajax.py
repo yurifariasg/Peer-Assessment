@@ -14,16 +14,21 @@ def register(request):
 
         This method register a new user from a HTTP POST Request.
         The content of this request should be a json formatted as:
-        { "name" : "user name" , "email" : "user email",
-        "password" : "user password", "type" : "student" }
-
+        { "firstname" : "first name" , "lastname" : "last name",
+        "email" : "user email", "password" : "user password",
+        "type" : "student" }
+        
         Returns:
         HTTP Code 200: The created user
         HTTP Code 400: JSON containing the invalid parameters
     """
     json_body = json.loads(request.body)
 
-    name = json_body.get("name")
+    firstname = json_body.get("firstname")
+    lastname = json_body.get("lastname")
+    username = firstname + lastname
+    username = username.replace(" ", "").lower()
+    print username
     email = json_body.get("email")
     password = json_body.get("password")
     userType = json_body.get("type")
@@ -31,7 +36,9 @@ def register(request):
     if len(password) < 8:
         raise ValidationError({"password": ["password has less than 8 characters."]})
 
-    user = User(username = name, email = email, password = make_password(password))
+    user = User(username = username, \
+         first_name = firstname, last_name = lastname, \
+         email = email, password = make_password(password))
     user.full_clean()
     user.save()
 
