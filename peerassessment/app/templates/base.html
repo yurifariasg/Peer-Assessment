@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+
+<head>
+
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" media="screen" type="text/css" />
+  <link rel="stylesheet" href="{% static 'css/base.css' %}" media="screen" type="text/css" />
+  <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}" media="screen" type="text/css" />
+  {% block stylesheets %}{% endblock %}
+  <title>{% block title %}Peer Assessment{% endblock %}</title>
+
+</head>
+
+<body>
+
+	<section id="heading">
+		<header class="top-header clearfix">
+			<div class="logo"> Peer Assessment </div>
+			<div class="top-nav"> 
+				<ul class="nav-left list-unstyled">
+
+					
+
+				</ul>
+
+
+
+				<ul class="nav-right pull-right list-unstyled">
+
+					<li class="dropdown">
+	                <a> {{ user }}</a>
+	            	</li>
+					<!--  -->
+					<li id="notification" class="dropdown">
+		                <a onclick='showNotification();' class="bg-bell">
+		                	<i class="fa fa-bell-o"></i>
+		                	<span class="badge badge-info">{{ notifications_count }}</span>
+		                </a>
+
+		                <div class="dropdown-menu pull-right with-arrow panel panel-default">
+		                    <div class="panel-heading">
+		                        Notifications
+		                    </div>
+		                    <ul class="list-group">
+								 {% block notifications_block %}
+
+								<li class="list-group-item">
+                            		<a href="javascript:;" class="media">
+                                		<span class="pull-left media-icon">
+                                    	<span class="round-icon sm bg-success"><i class="fa fa-bell-o"></i></span>
+                                		</span>
+		                                <div class="media-body">
+		                                    <span class="block">No tasks to be done</span>
+		                                    
+		                                </div>
+                            		</a>
+                        		</li>
+
+								 {% endblock %}     
+		                    </ul>
+		                    <div class="panel-footer">
+		                        <a href="javascript:;">Show all notifications.</a>
+		                    </div>
+                		</div>
+                <!--  -->
+	            	</li>
+
+					<li class="dropdown">
+		                <a class="bg-menu">
+		                	<i class="fa fa-bars"></i>
+		                </a>
+	            	</li>
+
+	            	<li class="dropdown">
+		                <a class="bg-settings">
+		                	<i class="fa fa-cogs"></i>
+		                </a>
+	            	</li>
+				</ul>
+			</div>
+
+		</header>
+
+	</section>
+
+	<section id="content">
+		<div class="container">
+			{% block main_container %}
+			{% endblock %}
+		</div>
+	</section>
+	<!-- Scripts -->
+	<script src="{% static 'js/jquery-1.11.1.js' %}"></script>
+	<script src="{% static 'js/base.js' %}"></script>
+	{% block scripts %}{% endblock %}
+</body>
+</html>
+
