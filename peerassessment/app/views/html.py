@@ -16,10 +16,18 @@ def index(request):
 @login_required()
 @types_required(["student"])
 def student_dashboard(request):
-
     return render_to_response("student/index.html", {'user':request.user.username})
 
 @login_required()
 @types_required(["professor"])
 def professor_dashboard(request):
-    return HttpResponse("You are authenticated as " + str(request.user.professor))
+    """
+        Professor Dashboard endpoint.
+
+        This is the endpoint for the professor's dashboard.
+    """
+
+    assignments = list(Assignment.objects.filter(owner = request.user.professor).all())
+
+    return render_to_response("professor/index.html", \
+        {'user': request.user.username, 'assignments': assignments})

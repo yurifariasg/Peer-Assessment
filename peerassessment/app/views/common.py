@@ -74,11 +74,8 @@ def types_required(types=[]):
     def decorator(func):
         def inner_decorator(request,*args, **kwargs):
             for type in types:
-                try:
-                    if hasattr(request.user, type):
-                        return func(request, *args, **kwargs)
-                except:
-                    pass
+                if hasattr(request.user, type):
+                    return func(request, *args, **kwargs)
             raise PermissionDenied()
         return wraps(func)(inner_decorator)
     return decorator

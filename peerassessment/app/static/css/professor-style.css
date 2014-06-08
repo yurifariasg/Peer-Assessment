@@ -1,0 +1,107 @@
+
+
+.disciplina {
+    margin-top: 50px;
+    max-width: 700px;
+}
+
+.title {
+    background: #fa7b58;
+    color: #fafafa;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px #888888;
+}
+
+.title a {
+    margin-left: 20px;
+    line-height: 50px;
+    color: #fafafa;
+    font-size: 22px;
+}
+
+
+.discipline-button-group {
+    list-style: none;
+}
+
+.activity-icon {
+    text-align: center;
+    line-height: 115px;
+    font-size: 50px; !important
+}
+
+.round-icon {
+    width: 70px;
+    height: 70px;
+    margin: 20px 15px;
+    padding: 0;
+    line-height: 0px;
+}
+
+.submission-color {
+    background-color: #f3c536;
+}
+
+.discussion-color {
+    background-color: #56bdf1;
+}
+
+.grading-color {
+    background-color: #FF5252;
+}
+
+.closed-color {
+    background-color: #616161;
+}
+
+
+.fa {
+    line-height: 1.4;
+    color: #ffffff;
+    width: 100%;
+}
+
+.discipline-button {
+    float: left;
+    padding: 9px 15px;
+    border-left: 1px solid rgba(255,255,255,0.1);
+    font-size: 22px;
+}
+
+.icon-block {
+    border-right: 1px solid rgba(82,82,82,0.1);
+
+}
+
+.activity {
+    /*background: #e5e5e5;*/
+    background: #ffffff;
+    padding: 10px;
+    margin: 10px 0px 0px 0px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px #888888;
+}
+
+.activity-title {
+    font-size: 26px;
+}
+
+.activity-subtitle {
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.common {
+    font-size: 17px;
+    color: #8D8B8B;
+}
+
+.margin-10 {
+    margin-top: 10px;
+}
+
+.mute {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #8D8B8B;
+}

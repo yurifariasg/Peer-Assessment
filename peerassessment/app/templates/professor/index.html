@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Professor Dashboard{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/professor-style.css' %}" media="screen" type="text/css" />
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block main_container %}
+
+<section class="disciplina center-block">
+    
+    <div class="row title">
+        <div class="pull-left">
+            <a>Disciplina Exemplo - 2014.1</a>
+        </div>
+        <div class="pull-right">
+            <ul class="discipline-button-group">
+                <li class="discipline-button">
+                    <i class="fa fa-plus"></i>
+                </li>
+                <li class="discipline-button">
+                    <i class="fa fa-edit"></i>
+                </li>
+                <li class="discipline-button">
+                    <i class="fa fa-trash-o"></i>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row activities">
+
+        {% for assignment in assignments %}
+
+        <div class="activity">
+
+            <div class="row">
+                <div class="col-sm-2 icon-block">
+                    <div class="center-block activity-icon">
+
+                        {% if assignment.stage == "Submission" %}
+                            <div class="round-icon submission-color">
+                                <i class="fa fa-arrow-circle-o-down"></i>
+                            </div>
+                        {% elif assignment.stage == "Discussion" %}
+                            <div class="round-icon discussion-color">
+                                <i class="fa fa-comment-o"></i>
+                            </div>
+                        {% elif assignment.stage == "Grading" %}
+                            <div class="round-icon grading-color">
+                                <i class="fa fa-pencil"></i>
+                            </div>
+                        {% else %}
+                            <div class="round-icon closed-color">
+                                <i class="fa fa-lock"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-sm-10">
+
+                    <div class="row activity-subtitle">
+                        <div class="col-sm-12">
+                        Atividade
+                        </div>
+                    </div>
+                    <div class="row activity-title">
+                        <div class="col-sm-12">
+                        {{assignment.name}}
+                        </div>
+                    </div>
+                    <div class="row mute margin-10">
+                        <div class="col-sm-4">Fase</div>
+                        <div class="col-sm-4">Deadline</div>
+                    </div>
+                    <div class="row common">
+                        <div class="col-sm-4">
+
+                        {% if assignment.stage == "Submission" %}
+                            Submissão
+                        {% elif assignment.stage == "Discussion" %}
+                            Discussão
+                        {% elif assignment.stage == "Grading" %}
+                            Nota
+                        {% else %}
+                            Fechado
+                        {% endif %}
+
+                        </div>
+                        <div class="col-sm-8">
+
+                            {% if assignment.stage == "Submission" %}
+                                {{assignment.submission_end_date}}
+                            {% elif assignment.stage == "Discussion" %}
+                                {{assignment.discussion_end_date}}
+                            {% elif assignment.stage == "Grading" %}
+                                {{assignment.grading_end_date}}
+                            {% else %}
+                                ---
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}

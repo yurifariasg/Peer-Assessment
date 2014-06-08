@@ -126,7 +126,6 @@ class Professor(Person):
         This class holds information of a professor registered in the system.
         It is used to identify a single professor in the system.
     """
-    owned_assignments = models.ManyToManyField('Assignment')
 
     def getType(self):
         return "professor"
