@@ -16,7 +16,13 @@ def index(request):
 @login_required()
 @types_required(["student"])
 def student_dashboard(request):
-    return render_to_response("student/index.html", {'user':request.user.username})
+    """
+        Student Dashboard endpoint.
+
+        This is the endpoint for the student's dashboard.
+    """
+    return render_to_response("student/index.html", \
+        {'user':request.user, 'assignments': list(request.user.student.assignments.all())})
 
 @login_required()
 @types_required(["professor"])
@@ -26,7 +32,6 @@ def professor_dashboard(request):
 
         This is the endpoint for the professor's dashboard.
     """
-
     assignments = list(Assignment.objects.filter(owner = request.user.professor).all())
 
     return render_to_response("professor/index.html", \

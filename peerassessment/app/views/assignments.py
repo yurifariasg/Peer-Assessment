@@ -119,7 +119,7 @@ def create(request):
 
         # TODO: Get Students from a discipline only
         students = Student.objects.all()
-        assignment.participants.add(*students)
+        assignment.student_set.add(*students)
         assignment.save()
 
     except Exception as e:

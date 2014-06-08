@@ -6,7 +6,9 @@ from django.contrib.auth.models import User
 # Place our models here
 
 class PAModel(models.Model):
-
+    """
+        This class holds common information to all models in the system.
+    """
     def try_delete():
         try:
             self.delete()
@@ -94,7 +96,6 @@ class Assignment(PAModel):
     grading_end_date = models.DateTimeField()
 
     owner = models.ForeignKey('Professor')
-    participants = models.ManyToManyField('Student')
 
 class Allocation(PAModel):
     """
