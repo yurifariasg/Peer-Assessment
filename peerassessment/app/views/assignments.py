@@ -46,6 +46,88 @@ def submit(request):
 @login_required_ajax()
 @types_required(["professor"])
 @ajax_endpoint
+def grade(request):
+    """
+    Grading assignment endpoint
+    The API shall receive the grade for each one of
+    the criterias for the paired students.
+    The content should be a json in the following format:
+    {
+        "assignment" : 1,
+        "grades" : [
+            {
+                "peer" : 1,
+                "grades" : [
+                    {
+                        "criteria" : 1,
+                        "grade" : 8.0
+                    },
+                    {
+                        "criteria" : 2,
+                        "grade" : 5.0
+                    }
+            },
+            {
+                "peer" : 2,
+                "grades" : [
+                    {
+                        "criteria" : 1,
+                        "grade" : 7.0
+                    },
+                    {
+                        "criteria" : 2,
+                        "grade" : 10.0
+                    }
+            }
+        ]
+    }
+    Grades must go from 0.0 to 10.0
+    """
+    json_body = json.loads(request.body)
+    assignment_id = json_body.get("assignment", -1)
+    json_grades = json_body.get("grades", [])
+
+    requesting_student = request.user.student
+    assignment = Assignment.get(id=assignment_id)
+    allocation = Allocation.get(assignment=assignment, student=requesting_student)
+
+    def get_peer(peer_num):
+        if peer_num == 1:
+            return allocation.peer1
+        elif peer_num == 2:
+            return allocation.peer2
+        elif peer_num == 3:
+            return allocation.peer3
+        elif peer_num == 4:
+            return allocation.peer4
+        return None
+
+    grades = []
+
+    for peer_body in json_body:
+        peer_id = peer_body.get("peer")
+        peer_grades = peer_body.get("grades", [])
+
+        for peer_grade in peer_grandes:
+
+            grade = Grade( \
+                grade = peer_grade.get("grade"), \
+                assignment = assignment, \
+                owner = requesting_student, \
+                student = get_peer(peer_id), \
+                criteria = peer_grade.get("criteria", -1) \
+            )
+            grade.full_clean()
+            grades.append(grade)
+
+    for grade in grades:
+        grade.save()
+
+
+@require_http_methods(["POST"])
+@login_required_ajax()
+@types_required(["student"])
+@ajax_endpoint
 def create(request):
     """
         Create assignment endpoint
