@@ -102,7 +102,7 @@ class Allocation(PAModel):
         This class holds information regarding a student's allocation in an assignment.
     """
     student = models.ForeignKey('Student')
-
+    assignment = models.ForeignKey('Assignment')
     peer1 = models.ForeignKey('Student', related_name="+")
     peer2 = models.ForeignKey('Student', related_name="+")
     peer3 = models.ForeignKey('Student', related_name="+")
