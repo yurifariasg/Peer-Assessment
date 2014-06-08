@@ -41,7 +41,7 @@ def test():
 
 		result = requests.post(BASE_URL + "/register", data= json.dumps(credentials))
 		assert(result.status_code == 200)
-	print OK
+	print "OK"
 
 if __name__ == "__main__":
 	test()
