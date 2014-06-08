@@ -13,9 +13,11 @@ urlpatterns = patterns('',
     # Assignments Endpoints
     url(r'^assignment/create$', 'app.views.assignments.create'),
     url(r'^assignment/submit$', 'app.views.assignments.submit'),
+    url(r'^assignment/message$', 'app.views.assignments.send_messages'),
 
     # HTML Endpoints
     url(r'^student/$', 'app.views.html.student_dashboard'),
+    url(r'^student/assignment/(?P<assignment_id>\d+)/discussion$','app.views.html.discussion_page'),
     url(r'^professor/$', 'app.views.html.professor_dashboard'),
     url(r'^professor/assignment/create$', 'app.views.html.create_assignment_page'),
     url(r'^$', 'app.views.html.index'),

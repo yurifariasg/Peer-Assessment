@@ -1,0 +1,132 @@
+
+.activity {
+    padding-bottom: 15px;
+}
+
+.btn-activity {
+    height: 100%;
+}
+
+.peer-block h3 {
+    margin-left: 30px;
+    margin-top: 4px;
+    margin-bottom: 6px;
+    font-size: 30px;
+}
+
+.peer-block {
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+.criteria-block {
+    margin-top: 20px;
+
+}
+
+.criteria-text {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 18px;
+
+}
+
+.comments {
+    background-color: #EAEAFF;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding: 5px 10px 0px 10px;
+}
+
+.comment-input {
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
+.comment-input .form-control {
+    border-radius: 0px;
+
+}
+
+/* THE SPEECH BUBBLE */
+
+.bubble {
+  position:relative;
+  padding:15px;
+  margin:1em 0 1.5em;
+  border:5px solid #323d54;
+  color:#333;
+  background:#fff;
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  border-radius:10px;
+}
+
+.bubble.theirs {
+  margin-left:30px;
+  margin-right:30px;
+}
+
+
+.bubble.mine {
+  margin-left:30px;
+  margin-right:30px;
+  background:#F0F2FF;
+}
+
+.bubble:before {
+  content:"";
+  position:absolute;
+  bottom:-20px;
+  left:40px;
+  border-width:20px 20px 0;
+  border-style:solid;
+  border-color:#323d54 transparent;
+  display:block;
+  width:0;
+}
+
+.bubble:after {
+  content:"";
+  position:absolute;
+  bottom:-13px;
+  left:47px;
+  border-width:13px 13px 0;
+  border-style:solid;
+  border-color:#fff transparent;
+  display:block;
+  width:0;
+}
+
+.bubble.theirs:before {
+  top:10px;
+  bottom:auto;
+  left:-30px;
+  border-width:15px 30px 15px 0;
+  border-color:transparent #323d54;
+}
+
+.bubble.theirs:after {
+  top:16px;
+  bottom:auto;
+  left:-21px;
+  border-width:9px 21px 9px 0;
+  border-color:transparent #fff;
+}
+
+.bubble.mine:before {
+  top:10px;
+  bottom:auto;
+  left:auto;
+  right:-30px;
+  border-width:15px 0 15px 30px;
+  border-color:transparent #323d54;
+}
+
+.bubble.mine:after {
+  top:16px;
+  bottom:auto;
+  left:auto;
+  right:-21px;
+  border-width:9px 0 9px 21px;
+  border-color:transparent #F0F2FF;
+}

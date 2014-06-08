@@ -12,6 +12,19 @@ STUDENT_CREDENTIALS = {
 	"type" : "student"
 }
 
+STUDENTS_CREDENTIALS = [STUDENT_CREDENTIALS]
+
+for i in range(20):
+	STUDENTS_CREDENTIALS.append(
+		{
+			"firstname" : "student" + str(i),
+			"lastname" : "last name",
+			"password" : "12345678",
+			"email" : "student" + str(i) + "@mail.com",
+			"type" : "student"
+		}
+	)
+
 PROFESSOR_CREDENTIALS = {
 	"firstname" : "Tomas",
 	"lastname" : "Souza Fagundes",
@@ -23,23 +36,14 @@ PROFESSOR_CREDENTIALS = {
 # Create a student
 
 def test():
-	result = requests.post(BASE_URL + "/register", data= json.dumps(STUDENT_CREDENTIALS))
-	assert(result.status_code == 200)
+	#result = requests.post(BASE_URL + "/register", data= json.dumps(STUDENT_CREDENTIALS))
+	#assert(result.status_code == 200)
 	result = requests.post(BASE_URL + "/register", data= json.dumps(PROFESSOR_CREDENTIALS))
 	assert(result.status_code == 200)
 
 	# Now, let create several students
-	for i in range(20):
-
-		credentials = {
-			"firstname" : "student" + str(i),
-			"lastname" : "test",
-			"password" : "12345678",
-			"email" : "student" + str(i) + "@mail.com",
-			"type" : "student"
-		}
-
-		result = requests.post(BASE_URL + "/register", data= json.dumps(credentials))
+	for credential in STUDENTS_CREDENTIALS:
+		result = requests.post(BASE_URL + "/register", data= json.dumps(credential))
 		assert(result.status_code == 200)
 	print "OK"
 

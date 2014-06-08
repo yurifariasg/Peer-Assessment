@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% load dictionary_extras %}
+
+{% load static %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/list-assignments-style.css' %}" media="screen" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/discussion.css' %}" media="screen" type="text/css" />
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+
+{% block main_container %}
+
+<section class="disciplina center-block">
+
+    <div class="row title">
+        <div class="pull-left">
+            <a>Discussão: {{ assignment.name }}</a>
+        </div>
+    </div>
+    {% for peer in messages.peers %}
+        <div class="activity row">
+            <div class="peer-block">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3>
+                            PEER {{peer}}
+                        </h3>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-default btn-activity">Atividade</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% for criteria_messages in messages.peers|access:peer %}
+
+                <div class="criteria-block">
+                    <div class="criteria-text">
+                        1. {{ criteria_messages.criteria.text }}
+                    </div>
+                    <div class="comments">
+                        {% for message in criteria_messages.messages %}
+                            {% if message.owner.id == user.id %}
+                                <p class="bubble mine">
+                                    {{message.text}}
+                                </p>
+                            {% else %}
+                                <p class="bubble theirs">
+                                    {{message.text}}
+                                </p>
+                            {% endif %}
+
+
+                        {% endfor %}
+
+                        <div class="comment-input">
+                            <input type="comment" class="form-control" placeholder="Comment...">
+                        </div>
+                    </div>
+
+                </div>
+
+            {% endfor %}
+        </div>
+
+    {% endfor %}
+
+</section>
+
+{% endblock %}

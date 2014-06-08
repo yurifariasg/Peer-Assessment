@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, redirect, render
+from django.shortcuts import render_to_response, redirect, render, get_object_or_404
 from django.http import HttpResponse
 from app.models import *
 import json
@@ -14,6 +14,7 @@ from django.contrib.auth.hashers  import *
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.http import Http404
+from django.db.models import Q
 from django.core.urlresolvers import reverse
 import datetime
 try:
@@ -72,9 +73,25 @@ def types_required(types=[]):
     """
     def decorator(func):
         def inner_decorator(request,*args, **kwargs):
-            for type in types:
-                if hasattr(request.user, type):
+            for required_type in types:
+                if hasattr(request.user, required_type):
                     return func(request, *args, **kwargs)
             raise PermissionDenied()
         return wraps(func)(inner_decorator)
     return decorator
+
+
+# Utility Functions
+
+def get_peer(peer_num, allocation):
+    if peer_num == 1:
+        return allocation.peer1
+    elif peer_num == 2:
+        return allocation.peer2
+    elif peer_num == 3:
+        return allocation.peer3
+    elif peer_num == 4:
+        return allocation.peer4
+    elif peer_num == 5:
+        return allocation.peer5
+    return None

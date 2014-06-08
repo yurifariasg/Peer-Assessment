@@ -34,7 +34,6 @@ section#heading {
 }
 
 .nav-left, .nav-right {
-
 	padding: 0;
 	font-size: 18px;
 	line-height: 22px;
@@ -67,7 +66,6 @@ a.bg-menu {
 }
 
 .top-header {
-
 }
 
 .top-header a {
@@ -264,5 +262,4 @@ width: 35px;
 height: 35px;
 font-size: 16px;
 line-height: 35px;
-
 }

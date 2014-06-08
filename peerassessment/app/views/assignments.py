@@ -44,7 +44,7 @@ def submit(request):
 
 @require_http_methods(["POST"])
 @login_required_ajax()
-@types_required(["professor"])
+@types_required(["student"])
 @ajax_endpoint
 def grade(request):
     """
@@ -91,16 +91,7 @@ def grade(request):
     assignment = Assignment.get(id=assignment_id)
     allocation = Allocation.get(assignment=assignment, student=requesting_student)
 
-    def get_peer(peer_num):
-        if peer_num == 1:
-            return allocation.peer1
-        elif peer_num == 2:
-            return allocation.peer2
-        elif peer_num == 3:
-            return allocation.peer3
-        elif peer_num == 4:
-            return allocation.peer4
-        return None
+
 
     grades = []
 
@@ -110,12 +101,15 @@ def grade(request):
 
         for peer_grade in peer_grandes:
 
+            # assert criteria is from this assignment
+            criteria = peer_grade.get("criteria", -1)
+
             grade = Grade( \
                 grade = peer_grade.get("grade"), \
                 assignment = assignment, \
                 owner = requesting_student, \
-                student = get_peer(peer_id), \
-                criteria = peer_grade.get("criteria", -1) \
+                student = get_peer(peer_id, allocation), \
+                criteria = criteria \
             )
             grade.full_clean()
             grades.append(grade)
@@ -123,10 +117,12 @@ def grade(request):
     for grade in grades:
         grade.save()
 
+    return { }
+
 
 @require_http_methods(["POST"])
 @login_required_ajax()
-@types_required(["student"])
+@types_required(["professor"])
 @ajax_endpoint
 def create(request):
     """
@@ -212,4 +208,55 @@ def create(request):
                 criteria.delete()
         raise e
 
-    return { "id" : assignment.id }
+    return { "id" : assignment.id, "criterias" : [ created_criteria.id for created_criteria in created_criterias ] }
+
+@require_http_methods(["POST"])
+@login_required_ajax()
+@types_required(["student"])
+@ajax_endpoint
+def send_messages(request):
+    """
+        Send messages to peers in an assignment's criteria.
+        It reseives a list of messages.
+        The content should be a json in the following format:
+        {
+            "assignment_id" : assignment_id,
+            "messages" : [{
+                "peer" : peer_id,
+                "criteria" : criteria_id,
+                "message" : "message content"
+            }]
+        }
+    """
+    json_body = json.loads(request.body)
+    assignment_id = json_body.get("assignment_id")
+
+    parsed_messages = []
+    messages = json_body.get("messages", [])
+
+    assignment = Assignment.objects.get(id = assignment_id)
+    allocation = Allocation.objects.get( \
+        student = request.user.student, assignment = assignment)
+
+    def get_criteria(criteria_id):
+        criteria = AssignmentCriteria.objects.get(id = criteria_id)
+        assert(criteria.assignment == assignment)
+        return criteria
+
+    for message in messages:
+
+        ## TODO: Assert that this criteria is from this assignment.
+        criteria = get_criteria(message.get("criteria"))
+
+        parsed_messages.append( \
+            Message( \
+            owner = request.user.student, \
+            recipient = get_peer(message.get("peer"), allocation), \
+            criteria = criteria, \
+            text = message.get("message", "")) \
+        )
+
+    for parsed_message in parsed_messages:
+        parsed_message.save()
+
+    return { }
