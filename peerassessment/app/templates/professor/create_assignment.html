@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/list-assignments-style.css' %}" media="screen" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/create-assignment-style.css' %}" media="screen" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/bootstrap-datetimepicker.min.css' %}" media="screen" type="text/css" />
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{% static 'js/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/create-assignment.js' %}"></script>
+{% endblock %}
+
+
+{% block main_container %}
+
+<section class="disciplina center-block">
+
+    <div class="row title">
+        <div class="pull-left">
+            <a>Criar Atividade</a>
+        </div>
+    </div>
+    <div class="activity row">
+
+        <form role="form" class="form-horizontal container-fluid">
+            <div class="row title-heading">
+                <div class="col-sm-5">
+                    <h3>Descrição</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="row">
+                    <div class="col-sm-12 clearfix">
+                        <input type="name" class="form-control input-lg" id="inputName" placeholder="Nome">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row title-heading">
+                <div class="col-sm-5">
+                    <h3>Deadlines</h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        <h5>Submissão</h5>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <h5>Discussão</h5>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <h5>Nota</h5>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        <div class='input-group date' id='submission-picker'>
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class='input-group date' id='discussion-picker'>
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class='input-group date' id='grading-picker'>
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+            </div>
+
+            <div class="row title-heading top-margin">
+                <div class="col-sm-5">
+                    <h3>Critérios</h3>
+                </div>
+                <div class="col-sm-7 criterias-buttons">
+                    <div class="row pull-right">
+                        <div class="col-sm-6">
+                            <button id="addCriteria" type="button" class="btn btn-success"><i class="fa fa-plus"></i></button>
+                        </div>
+                        <div class="col-sm-6">
+                            <button id="removeCriteria" type="button" class="btn btn-danger"><i class="fa fa-minus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row criterias">
+                <div class="row criteria">
+
+                    <div class="col-sm-10">
+                        <input type="description" class="form-control" placeholder="Descrição">
+                    </div>
+
+                    <div class="col-sm-2">
+                        <input type="weight" class="form-control" placeholder="Peso">
+                    </div>
+
+                </div>
+            </div>
+            <!-- <div class="row">
+                <div class="row" style="text-align: center;">
+                    <div class="col-sm-2 pull-right">
+                        10
+                    </div>
+                    <div class="col-sm-2 pull-right">
+                        SOMA
+                    </div>
+                </div>
+            </div> -->
+            <div class="row submit-button">
+                <button id="createAssignment" type="button" class="btn btn-success btn-lg btn-block">Criar Atividade</button>
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+
+<div id="template_criteria" class="row criteria" style="display: none;">
+
+    <div class="col-sm-10">
+        <input type="description" class="form-control" placeholder="Descrição">
+    </div>
+
+    <div class="col-sm-2">
+        <input type="weight" class="form-control" placeholder="Peso">
+    </div>
+
+</div>
+
+
+{% endblock %}

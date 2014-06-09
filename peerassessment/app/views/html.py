@@ -10,6 +10,12 @@ def index(request):
 
         This is the base endpoint of the page.
     """
+    if request.user.is_authenticated:
+        if hasattr(request.user, 'student'):
+            return redirect(reverse(student_dashboard))
+        elif hasattr(request.user, 'professor'):
+            return redirect(reverse(professor_dashboard))
+
     return render_to_response("index.html")
 
 
@@ -36,3 +42,9 @@ def professor_dashboard(request):
 
     return render_to_response("professor/index.html", \
         {'user': request.user, 'assignments': assignments})
+
+@login_required()
+@types_required(["professor"])
+def create_assignment_page(request):
+    return render_to_response("professor/create_assignment.html", \
+        {'user': request.user})

@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     # HTML Endpoints
     url(r'^student/$', 'app.views.html.student_dashboard'),
     url(r'^professor/$', 'app.views.html.professor_dashboard'),
+    url(r'^professor/assignment/create$', 'app.views.html.create_assignment_page'),
     url(r'^$', 'app.views.html.index'),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

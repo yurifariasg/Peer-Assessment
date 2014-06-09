@@ -1,0 +1,41 @@
+.activity {
+    padding: 0px 30px 30px 20px;
+    /*margin: 0px;*/
+}
+
+.criterias-buttons {
+    margin-top: 12px;
+}
+
+.criteria {
+    margin-bottom: 10px;
+}
+
+.submit-button {
+    margin-top: 15px;
+}
+
+.top-margin {
+    margin-top: 20px;
+}
+
+.row h5 {
+    margin-top: 0px;
+}
+
+.title-heading {
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    margin-bottom: 15px;
+}
+
+.title-heading h3 {
+    margin-left: -15px;
+}
+
+.bootstrap-datetimepicker-widget ul {
+    padding: 0;
+}
+
+.date input {
+    font-size: 13px;
+}

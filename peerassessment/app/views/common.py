@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect, render
 from django.http import HttpResponse
 from app.models import *
 import json
