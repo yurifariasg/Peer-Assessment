@@ -15,7 +15,7 @@ class JobManager(object):
         JobManager.is_running = True
         cls.sched.start()
 
-        @cls.sched.interval_schedule(seconds=10)
+        @cls.sched.interval_schedule(minutes=10)
         def scheduled_job():
             print "Checking for Assignments that needs to be updated"
             AssignmentUpdater.update_assignments()

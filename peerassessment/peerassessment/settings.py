@@ -24,6 +24,8 @@ SECRET_KEY = '(bmiu8_&2m*h@vcdp$c_hwne(ni=f660$*_2@4cenohia8mu7%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+HEROKU = False
+
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -126,15 +128,38 @@ USE_L10N = True
 
 USE_TZ = True
 
+if not HEROKU:
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.6/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR,'static')
-STATIC_URL = '/static/'
+    # Static files (CSS, JavaScript, Images)
+    # https://docs.djangoproject.com/en/1.6/howto/static-files/
+    STATIC_ROOT = os.path.join(BASE_DIR,'static')
+    STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(BASE_DIR, 'staticfiles'),
-)
+    STATICFILES_DIRS = (
+        # Put strings here, like "/home/html/static" or "C:/www/django/static".
+        # Always use forward slashes, even on Windows.
+        # Don't forget to use absolute paths, not relative paths.
+        os.path.join(BASE_DIR, 'staticfiles'),
+    )
+
+else:
+
+    # Parse database configuration from $DATABASE_URL
+    import dj_database_url
+    DATABASES['default'] =  dj_database_url.config()
+
+    # Honor the 'X-Forwarded-Proto' header for request.is_secure()
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+    # Allow all host headers
+    ALLOWED_HOSTS = ['*']
+
+    # Static asset configuration
+    import os
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    STATIC_ROOT = 'staticfiles'
+    STATIC_URL = '/static/'
+
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, '../app/static'),
+    )
