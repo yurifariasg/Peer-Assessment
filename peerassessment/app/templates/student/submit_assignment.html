@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/list-assignments-style.css' %}" media="screen" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/create-assignment-style.css' %}" media="screen" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/bootstrap-datetimepicker.min.css' %}" media="screen" type="text/css" />
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{% static 'js/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/submit-assignment.js' %}"></script>
+{% endblock %}
+
+{% block main_container %}
+<section class="disciplina center-block">
+    <div id="assignmentid" data-id={{assignment.id}} style="display: none;">
+
+    </div>
+	<div class="row title">
+        <div class="pull-left">
+            <a>Submeter Atividade</a>
+        </div>
+    </div>
+
+     <div class="activity row">
+
+        <form role="form" class="form-horizontal container-fluid">
+
+
+        	<div class="row title-heading">
+                <div class="col-sm-5">
+                    <h3>{{ assignment.name }}</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="row">
+                    <div class="col-sm-12 clearfix">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row">
+                    <div class="col-sm-5 clearfix">
+
+                        <ul class="list-group">
+                              <li class="list-group-item active">
+                                     Critérios
+                                </li>
+
+                                {% for criteria in criterias %}
+                                    <li class="list-group-item"> {{criteria.text}}</li>                                
+                                {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row title-heading top-margin"> 
+                <div class="col-sm-5">
+                    <h3>Link do Trabalho</h3>
+                </div>
+               
+            </div>
+            <div class="row">
+                <div class="row">
+                    <div class="col-sm-12">
+                        
+                        <input id="linkassignment" type="linkassignment" class="form-control" placeholder="Copie aqui o link do seu trabalho">
+                        
+
+
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row title-heading">
+                <div class="col-sm-5">
+                    <h3>Equipe</h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row">
+                    <div class="col-sm-12 clearfix">
+                    	<h5>Thiago Ferreira Patricio</h5>
+                    	<h5>Yuri Farias Gomes</h5>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="row">
+                <div class="row" style="text-align: center;">
+                    <div class="col-sm-2 pull-right">
+                        10
+                    </div>
+                    <div class="col-sm-2 pull-right">
+                        SOMA
+                    </div>
+                </div>
+            </div> -->
+             <div class="row title-heading top-margin">
+               
+               
+            </div>
+            <div class="alert alert-warning">
+                <strong> Importante! </strong>
+                Lembre-se de deixar o documento público no Google Docs
+            </div>
+
+            <div class="row submit-button">
+                <button id="submitAssignment" type="button" class="btn btn-success btn-lg btn-block">Submeter</button>
+            </div>
+
+
+
+
+        </form>
+
+    </div>
+
+
+</section>
+{% endblock %}
+
+
+
+
+

@@ -91,3 +91,21 @@ def professor_dashboard(request):
 def create_assignment_page(request):
     return render_to_response("professor/create_assignment.html", \
         {'user': request.user})
+
+
+@login_required()
+@types_required(["student"])
+def submit_assignment_page(request, assignment_id):
+
+    assignment = get_object_or_404(Assignment, id=assignment_id)
+    criterias = AssignmentCriteria.objects.filter(assignment = assignment).all()
+
+    return render_to_response("student/submit_assignment.html", \
+        {'user': request.user, 'criterias': criterias, 'assignment': assignment})
+
+
+
+
+
+
+
