@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^assignment/message$', 'app.views.assignments.send_messages'),
 
     # HTML Endpoints
+    url(r'^signup/$', 'app.views.html.signup'),
     url(r'^student/$', 'app.views.html.student_dashboard'),
     url(r'^student/assignment/(?P<assignment_id>\d+)/discussion$','app.views.html.discussion_page'),
     url(r'^student/assignment/(?P<assignment_id>\d+)/submit$', 'app.views.html.submit_assignment_page'),
