@@ -18,6 +18,14 @@ def index(request):
 
     return render_to_response("index.html")
 
+def signup(request):
+    """
+        Signup endpoint.
+
+        This is the endpoint for the user signup 
+    """
+    return render_to_response("signup.html")
+
 
 @login_required()
 @types_required(["student"])

@@ -8,9 +8,13 @@ background-color: #323d54;
   margin-top: 20px;
 }
 
-bottom-padding {
+.bottom-padding {
   margin-bottom: 20px;
 }
+/*
+.bottom-padding-textview {
+  margin-bottom: 10px;
+} */
 
 body {
   padding-top: 40px;
@@ -34,6 +38,7 @@ body {
 
 .form-signin .checkbox {
   font-weight: normal;
+  padding-left: 0px; /* overring padding left from bootstrap */
 }
 
 .form-signin .form-control {
@@ -49,16 +54,23 @@ body {
   z-index: 2;
 }
 .form-signin input[type="email"] {
-  margin-bottom: -1px;
+  margin-bottom: 10px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
-.form-signin input[type="password"] {
+.form-signin input[id="confirmPassword"] {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
 
+input[type="button"] {
+  margin-top: 15px;
+}
+
+input { 
+  margin-bottom: 5px !important; 
+}
 
 .authenty.signin-main input[type="text"],
 .authenty.signin-main input[type="password"] {

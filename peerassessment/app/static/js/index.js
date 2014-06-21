@@ -4,7 +4,7 @@ function login() {
 	var password = $("#password").val();
 	
 	var content = JSON.stringify({ "email" : email, "password" : password });
-	console.log("fail: asdas");
+
 	$.post("login", content,
 	 function( data, txtStatus, xhr ) {
 		// Sucessful!
