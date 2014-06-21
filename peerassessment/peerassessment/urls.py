@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^student/assignment/(?P<assignment_id>\d+)/submit$', 'app.views.html.submit_assignment_page'),
     url(r'^professor/$', 'app.views.html.professor_dashboard'),
     url(r'^professor/assignment/create$', 'app.views.html.create_assignment_page'),
+    url(r'^professor/course/create$', 'app.views.html.create_course_page'),
     url(r'^$', 'app.views.html.index'),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

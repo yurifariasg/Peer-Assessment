@@ -112,6 +112,11 @@ def submit_assignment_page(request, assignment_id):
         {'user': request.user, 'criterias': criterias, 'assignment': assignment})
 
 
+@login_required()
+@types_required(["professor"])
+def create_course_page(request):
+    return render_to_response("professor/create_course.html", \
+        {'user': request.user})
 
 
 

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/list-assignments-style.css' %}" media="screen" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/create-assignment-style.css' %}" media="screen" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/create-course-style.css' %}" media="screen" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/bootstrap-datetimepicker.min.css' %}" media="screen" type="text/css" />
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{% static 'js/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/submit-assignment.js' %}"></script>
+{% endblock %}
+
+{% block main_container %}
+<section class="disciplina center-block">
+
+    <div id="assignmentid" data-id={{assignment.id}} style="display: none;">
+
+    </div>
+	<div class="row title">
+        <div class="pull-left">
+            <a>Criar Disciplina</a>
+        </div>
+    </div>
+
+     <div class="activity row">
+
+        <form role="form" class="form-horizontal container-fluid">
+
+
+            <div class="row top-margin"> 
+                <div class="col-sm-5">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row">
+                    <div class="col-sm-2"> 
+                        <div class="center-height">
+                            Disciplina:
+                        </div>
+                    </div>
+
+                    <div class="col-sm-10"> 
+                        <div class="form-group"> 
+                            <input id="coursename" type="text" class="form-control" placeholder="Nome da disciplina">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row">
+                    <div class="col-sm-2"> 
+                        <div class="center-height">
+                            Penalidade:
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2"> 
+                        <div class="penalty-box input-group">
+                            <input id="penalty" type="text" class="form-control">
+                            <span class="input-group-addon">%</span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-8"> 
+                        <div class="height-alert alert alert-warning">
+                            <strong>Penalidade </strong>sofrida quando o aluno não cumpre uma fase.
+                        </div>
+                    </div> 
+
+                </div>
+            </div>
+
+             <div class="row title-heading top-margin">
+                  
+            </div>
+
+            <div class="row submit-button">
+                <button id="submitAssignment" type="button" class="btn btn-success btn-lg btn-block">Criar</button>
+            </div>
+
+        </form>
+
+    </div>
+
+
+</section>
+{% endblock %}
+
+
+
+
+
