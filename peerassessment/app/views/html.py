@@ -46,10 +46,17 @@ def discussion_page(request, assignment_id = None):
         This is the endpoint for the student's discussion on a assignment
     """
     assignment = get_object_or_404(Assignment, id=assignment_id)
-    #allocation = Allocation.filter(assignment = assignment, student = request.user.student)
     allocation = get_object_or_404(Allocation, student = request.user.student, assignment = assignment)
     criterias = AssignmentCriteria.objects.filter(assignment = assignment).all()
     request_student = request.user.student
+
+    submissions = {
+        1 : Submission.objects.get(assignment = assignment, student = get_peer(1, allocation)).url,
+        2 : Submission.objects.get(assignment = assignment, student = get_peer(2, allocation)).url,
+        3 : Submission.objects.get(assignment = assignment, student = get_peer(3, allocation)).url,
+        4 : Submission.objects.get(assignment = assignment, student = get_peer(4, allocation)).url,
+        5 : Submission.objects.get(assignment = assignment, student = get_peer(5, allocation)).url
+    }
 
     content = {
         'user' : request.user,
@@ -79,7 +86,9 @@ def discussion_page(request, assignment_id = None):
             )
     return render_to_response("student/discussion.html", \
         {'user': request.user, \
-        'messages' : content})
+        'assignment' : assignment, \
+        'messages' : content,
+        'submissions' : submissions})
 
 @login_required()
 @types_required(["professor"])
@@ -97,6 +106,11 @@ def professor_dashboard(request):
 @login_required()
 @types_required(["professor"])
 def create_assignment_page(request):
+    """
+        Create Assignment endpoint.
+
+        This page allows the user to create an assignment.
+    """
     return render_to_response("professor/create_assignment.html", \
         {'user': request.user})
 

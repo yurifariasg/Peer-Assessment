@@ -172,8 +172,8 @@ def create(request):
         except ValueError:
             raise ValidationError({"weight" : ["not a valid float value"]})
 
-    if weight_sum != 1.0:
-        raise ValidationError({"weight_sum" : [ "sum must be 1.0" ]})
+    if abs(weight_sum - 1.0) > 0.001:
+        raise ValidationError({"weight_sum" : [ "sum must be 1.0, it is " + str(weight_sum) ]})
 
     try:
         created_criterias = []
@@ -247,14 +247,17 @@ def send_messages(request):
 
         ## TODO: Assert that this criteria is from this assignment.
         criteria = get_criteria(message.get("criteria"))
+        if criteria.assignment != assignment:
+            raise ValidationError({"criteria" : ["Criteria not from assignment."]})
 
-        parsed_messages.append( \
-            Message( \
+        message = Message( \
             owner = request.user.student, \
             recipient = get_peer(message.get("peer"), allocation), \
             criteria = criteria, \
-            text = message.get("message", "")) \
-        )
+            text = message.get("message", ""))
+        message.full_clean()
+
+        parsed_messages.append(message)
 
     for parsed_message in parsed_messages:
         parsed_message.save()

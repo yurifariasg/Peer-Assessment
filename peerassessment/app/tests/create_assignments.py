@@ -21,7 +21,10 @@ def test():
         "discussion_end_date" : createDate(1),
         "grading_end_date" : createDate(2),
         "criterias" : [
-            {"name" : "Hello Criteria", "weight" : 1.0}
+            {"name" : "Portugues da Atividade", "weight" : 0.2},
+            {"name" : "Criterio de avaliacao que voce deve responder", "weight" : 0.3},
+            {"name" : "Criterio de avaliacao que voce deve responder", "weight" : 0.1},
+            {"name" : "Criterio de avaliacao que voce deve responder", "weight" : 0.4}
         ]
     }
 
