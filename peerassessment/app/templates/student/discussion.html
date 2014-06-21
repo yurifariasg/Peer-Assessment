@@ -10,68 +10,119 @@
 {% endblock %}
 
 {% block scripts %}
+<script type="text/javascript" src="{% static 'js/autosize.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/discussion.js' %}"></script>
 {% endblock %}
 
 
 {% block main_container %}
 
-<section class="disciplina center-block">
+<section id="assignment" class="disciplina center-block" data-id="{{ assignment.id }}">
 
     <div class="row title">
         <div class="pull-left">
             <a>Discussão: {{ assignment.name }}</a>
         </div>
     </div>
-    {% for peer in messages.peers %}
-        <div class="activity row">
-            <div class="peer-block">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <h3>
-                            PEER {{peer}}
-                        </h3>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="pull-right">
-                            <button type="button" class="btn btn-default btn-activity">Atividade</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div id="peers-carousel" class="carousel slide" data-ride="carousel" data-interval="false">
 
-            {% for criteria_messages in messages.peers|access:peer %}
-
-                <div class="criteria-block">
-                    <div class="criteria-text">
-                        1. {{ criteria_messages.criteria.text }}
-                    </div>
-                    <div class="comments">
-                        {% for message in criteria_messages.messages %}
-                            {% if message.owner.id == user.id %}
-                                <p class="bubble mine">
-                                    {{message.text}}
-                                </p>
-                            {% else %}
-                                <p class="bubble theirs">
-                                    {{message.text}}
-                                </p>
-                            {% endif %}
-
-
-                        {% endfor %}
-
-                        <div class="comment-input">
-                            <input type="comment" class="form-control" placeholder="Comment...">
-                        </div>
-                    </div>
-
-                </div>
-
-            {% endfor %}
+        <div class="row title carousel-navigator">
+            <ol class="carousel-indicators peer-indicators">
+                <li data-target="#peers-carousel" data-slide-to="0" class="not-last active"></li>
+                <li data-target="#peers-carousel" data-slide-to="1" class="not-last"></li>
+                <li data-target="#peers-carousel" data-slide-to="2" class="not-last"></li>
+                <li data-target="#peers-carousel" data-slide-to="3" class="not-last"></li>
+                <li data-target="#peers-carousel" data-slide-to="4"></li>
+            </ol>
         </div>
 
-    {% endfor %}
+        <div class="carousel-inner">
+
+        {% for peer in messages.peers %}
+
+            {% if peer == 1 %}
+            <div class="item active">
+
+            {% else %}
+            <div class="item">
+
+            {% endif %}
+            <div class="activity row">
+                <div class="peer-block">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3>
+                                PEER {{peer}}
+                            </h3>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="pull-right">
+                                <button type="button" class="btn btn-default btn-activity" onclick="window.open('{{ submissions|access:peer }}')">Atividade</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% for criteria_messages in messages.peers|access:peer %}
+
+                    <div class="criteria-block">
+                        <div class="criteria-text">
+                            {{ criteria_messages.criteria.text }}
+                        </div>
+                        <div class="comments">
+                            {% for message in criteria_messages.messages %}
+                                {% if message.owner.id == user.id %}
+                                    <div class="bubble mine">
+                                        {{message.text}}
+                                    </div>
+                                {% else %}
+                                    <div class="bubble theirs">
+                                        {{message.text}}
+                                    </div>
+                                {% endif %}
+
+                            {% endfor %}
+
+                            <div class="comment-input input-group" data-criteria="{{criteria_messages.criteria.id}}" data-peer="{{peer}}">
+                                    <textarea type="comment" class="form-control" placeholder="Comment..."></textarea>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default btn-send" type="button">
+                                            <i id="send-icon-template" class="fa fa-send"></i>
+
+                                        </button>
+
+
+
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+            </div>
+
+        {% endfor %}
+
+        </div>
+        <!-- Controls -->
+        <a class="left peer-carousel-control" href="#peers-carousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="right peer-carousel-control" href="#peers-carousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+    </div>
 
 </section>
+
+<p id="mine-bubble-template" style="display: none;" class="bubble mine">
+</p>
+
+<i id="send-icon-template" class="fa fa-send" style="display: none;"></i>
+
+<div id="loading-template" class="loading-img" style="display: none;">
+    <img src="{% static 'img/spinner.png' %}" height="20" width="20">
+</div>
 
 {% endblock %}

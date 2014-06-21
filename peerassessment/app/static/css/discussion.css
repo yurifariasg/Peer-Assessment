@@ -1,26 +1,106 @@
+/* CSS For the Discussion Page */
 
 .activity {
     padding-bottom: 15px;
 }
 
 .btn-activity {
+    margin-top: 7px;
+    margin-right: 10px;
     height: 100%;
+}
+
+.comment-input textarea {
+    resize: none;
+    box-shadow: none !important;
+    border-color: #ccc !important;
+    height: 34px;
+}
+
+.item {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+}
+
+.carousel-inner {
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.carousel-navigator {
+    margin-top: 10px;
+    background: #fff;
+}
+
+.carousel-navigator a {
+    margin-left: 20px;
+    line-height: 50px;
+    font-size: 22px;
+    color: #000;
+}
+
+.peer-indicators {
+    position: inherit;
+    width: 100%;
+    color: #000;
+    margin-left: 0;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.peer-indicators li {
+    text-indent: 0;
+    border-color: #000;
+    margin: 0;
+    width: 20px;
+    height: 20px;
+}
+
+.peer-indicators .not-last:after {
+    content: ' ';
+    display: block;
+    height: 1px;
+    position: relative;
+    right: -21px;
+    top: 9px;
+    width: 140px;
+    background-color: #cecece;
+}
+
+.peer-indicators .active {
+    background-color: #cecece;
+    width: 20px;
+    height: 20px;
+    border-width: 2px;
+}
+
+.peer-indicators .active:after {
+    top: 8px;
+}
+
+.peer-indicators .not-last {
+    margin-right: 140px;
 }
 
 .peer-block h3 {
     margin-left: 30px;
-    margin-top: 4px;
-    margin-bottom: 6px;
+    margin-top: 8px;
+    margin-bottom: 3px;
     font-size: 30px;
 }
 
 .peer-block {
-    border-bottom: 1px solid rgba(0,0,0,0.2);
 }
 
 .criteria-block {
-    margin-top: 20px;
-
+    margin-top: 15px;
+    padding-top: 20px;
+    border-top: 15px solid rgba(198,198,198,0.2);
+    margin-left: -10px;
+    margin-right: -10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .criteria-text {
@@ -31,20 +111,68 @@
 }
 
 .comments {
-    background-color: #EAEAFF;
     margin-left: -10px;
     margin-right: -10px;
     padding: 5px 10px 0px 10px;
 }
 
 .comment-input {
-    margin-left: -10px;
-    margin-right: -10px;
 }
 
 .comment-input .form-control {
-    border-radius: 0px;
+    border-radius: 3px;
+}
 
+.peer-carousel-control {
+    position: fixed;
+    width: 15%;
+    top: 0;
+    bottom: 0;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 50px;
+}
+.peer-carousel-control .glyphicon-chevron-left {
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    color: ##323d54;
+}
+
+.peer-carousel-control .glyphicon-chevron-right {
+    right: 50%;
+    top: 50%;
+    position: absolute;
+    color: ##323d54;
+}
+
+.left {
+    left: 0;
+    right: auto;
+}
+
+.right {
+    right: 0;
+    left: auto;
+}
+
+
+/* Animation Spinner */
+
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+.loading-img {
+    -webkit-animation-name:             rotate;
+    -webkit-animation-duration:         1.0s;
+    -webkit-animation-iteration-count:  infinite;
+    -webkit-animation-timing-function:  linear;
 }
 
 /* THE SPEECH BUBBLE */
@@ -53,24 +181,26 @@
   position:relative;
   padding:15px;
   margin:1em 0 1.5em;
-  border:5px solid #323d54;
+  /*border:1px solid #323d54;*/
   color:#333;
   background:#fff;
   -webkit-border-radius:10px;
   -moz-border-radius:10px;
   border-radius:10px;
+  word-wrap: break-word;
 }
 
 .bubble.theirs {
   margin-left:30px;
   margin-right:30px;
+  background: #EEE;
 }
 
 
 .bubble.mine {
   margin-left:30px;
   margin-right:30px;
-  background:#F0F2FF;
+  background:#D7E4ED;
 }
 
 .bubble:before {
@@ -80,7 +210,7 @@
   left:40px;
   border-width:20px 20px 0;
   border-style:solid;
-  border-color:#323d54 transparent;
+  border-color:#D7E4ED transparent;
   display:block;
   width:0;
 }
@@ -92,41 +222,41 @@
   left:47px;
   border-width:13px 13px 0;
   border-style:solid;
-  border-color:#fff transparent;
+  border-color:#EEE transparent;
   display:block;
   width:0;
 }
 
 .bubble.theirs:before {
-  top:10px;
+  top:5px;
   bottom:auto;
-  left:-30px;
-  border-width:15px 30px 15px 0;
-  border-color:transparent #323d54;
+  left:-10px;
+  border-width:7px 15px 15px 0;
+  border-color:transparent #EEE;
 }
 
 .bubble.theirs:after {
-  top:16px;
+  top:7px;
   bottom:auto;
   left:-21px;
   border-width:9px 21px 9px 0;
-  border-color:transparent #fff;
+  border-color:transparent #EEE;
 }
 
 .bubble.mine:before {
-  top:10px;
+  top:5px;
   bottom:auto;
   left:auto;
-  right:-30px;
-  border-width:15px 0 15px 30px;
-  border-color:transparent #323d54;
+  right:-10px;
+  border-width:7px 0 15px 30px;
+  border-color:transparent #D7E4ED;
 }
 
 .bubble.mine:after {
-  top:16px;
+  top:7px;
   bottom:auto;
   left:auto;
   right:-21px;
   border-width:9px 0 9px 21px;
-  border-color:transparent #F0F2FF;
+  border-color:transparent #D7E4ED;
 }
