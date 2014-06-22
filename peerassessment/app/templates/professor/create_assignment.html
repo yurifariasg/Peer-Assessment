@@ -17,11 +17,11 @@
 
 {% block main_container %}
 
-<section class="disciplina center-block">
+<section id="assignment" data-id="{%block assignment_id %}{%endblock%}" class="disciplina center-block">
 
     <div class="row title">
         <div class="pull-left">
-            <a>Criar Atividade</a>
+            <a>{% block activity-title %} Criar Atividade {% endblock %}</a>
         </div>
     </div>
     <div class="activity row">
@@ -35,7 +35,7 @@
             <div class="row">
                 <div class="row">
                     <div class="col-sm-12 clearfix">
-                        <input type="name" class="form-control input-lg" id="inputName" placeholder="Nome">
+                        <input type="name" class="form-control input-lg" id="inputName" placeholder="Nome" value="{%block name-default %}{% endblock %}">
                     </div>
                 </div>
             </div>
@@ -66,7 +66,9 @@
                 <div class="row">
 
                     <div class="col-sm-4">
-                        <div class='input-group date' id='submission-picker'>
+                        <div class='input-group date' id='submission-picker'
+                                date-date-format="YYYY/MM/DD HH:MM"
+                                data-date-defaultDate="{%block submission-default-date %}{%endblock%}">
                             <input type='text' class="form-control" />
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -74,25 +76,27 @@
                     </div>
 
                     <div class="col-sm-4">
-                        <div class='input-group date' id='discussion-picker'>
+                        <div class='input-group date' id='discussion-picker'
+                                data-date-defaultDate="{%block discussion-default-date %}{%endblock%}">
                             <input type='text' class="form-control" />
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <div class='input-group date' id='grading-picker'>
+                        <div class='input-group date' id='grading-picker'
+                                data-date-defaultDate="{%block grading-default-date %}{%endblock%}">
                             <input type='text' class="form-control" />
                             <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
                     </div>
-
-
                 </div>
+            </div>
 
-
-
+            <div class="row">
+                <div id="warning-container" class="height-alert alert alert-warning" style="display: none;">
+                </div>
             </div>
 
             <div class="row title-heading top-margin">
@@ -111,30 +115,22 @@
                 </div>
             </div>
             <div class="row criterias">
-                <div class="row criteria">
+                {% block criterias %}
+                    <div class="row criteria">
+                        <div class="col-sm-10">
+                            <input type="description" class="form-control" placeholder="Descrição">
+                        </div>
 
-                    <div class="col-sm-10">
-                        <input type="description" class="form-control" placeholder="Descrição">
+                        <div class="col-sm-2">
+                            <input type="weight" class="form-control" placeholder="Peso">
+                        </div>
                     </div>
-
-                    <div class="col-sm-2">
-                        <input type="weight" class="form-control" placeholder="Peso">
-                    </div>
-
-                </div>
+                {% endblock %}
             </div>
-            <!-- <div class="row">
-                <div class="row" style="text-align: center;">
-                    <div class="col-sm-2 pull-right">
-                        10
-                    </div>
-                    <div class="col-sm-2 pull-right">
-                        SOMA
-                    </div>
-                </div>
-            </div> -->
+
             <div class="row submit-button">
-                <button id="createAssignment" type="button" class="btn btn-success btn-lg btn-block">Criar Atividade</button>
+                <button id="createAssignment" type="button" class="btn btn-success btn-lg btn-block">
+                    {% block submit-title %} Criar Atividade {% endblock %}</button>
             </div>
 
         </form>

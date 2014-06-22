@@ -22,3 +22,16 @@
 </li>
 
 {% endblock %}
+
+{% block assignment_button_group %}
+<div class="pull-right">
+    <div class="assignment-settings-group">
+        <a href="assignment/{{assignment.id}}/edit">
+            <i class="fa fa-edit"></i>
+        </a>
+        <a href="javascript:;">
+            <i class="fa fa-trash-o"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}

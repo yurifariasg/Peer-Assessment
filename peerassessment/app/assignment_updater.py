@@ -61,9 +61,7 @@ def allocate(assignment):
     # This has a huge memory overhead, due to the QuerySet evaluation
     # We need to improve this later on
     # https://docs.djangoproject.com/en/dev/ref/models/querysets/#when-querysets-are-evaluated
-
     submissions = Submission.objects.filter(assignment = assignment)
-
     participants = list([submission.student for submission in submissions])
     random.shuffle(participants)
 
@@ -72,6 +70,7 @@ def allocate(assignment):
     if len(participants) < 5:
         raise ValidationError({"Assignment": ["Has less than 5 submissions."]})
 
+    # Perform Jacques' Algorithm
     for i in range(len(participants)):
 
         if i - 2 < 0:
@@ -103,5 +102,10 @@ def allocate(assignment):
             peer4 = peer4, \
             peer5 = peer5 ) )
 
+    # Just in case, we delete all previous allocations on this assignment
+    existing_allocations = Allocation.objects.filter(assignment = assignment)
+    existing_allocations.delete()
+
+    # Now we save
     for allocation in allocations:
         allocation.save()

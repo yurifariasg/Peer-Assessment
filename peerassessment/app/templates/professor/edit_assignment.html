@@ -1,0 +1,44 @@
+{% extends "professor/create_assignment.html" %}
+
+{% load static %}
+
+{% block scripts %}
+
+<script type="text/javascript" src="{% static 'js/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/edit-assignment.js' %}"></script>
+
+{% endblock %}
+
+{% block title %}Editar Atividade{% endblock %}
+{% block activity-title %}Editar Atividade{% endblock %}
+
+{% block name-default %}{{assignment.name}}{% endblock %}
+
+{% block submit-title %}Editar Atividade{% endblock %}
+
+{% block assignment_id %}{{assignment.id}}{% endblock %}
+
+{% block submission-default-date %}{{ assignment.submission_end_date|date:"d/m/Y H:i" }}{% endblock %}
+
+{% block discussion-default-date %}{{ assignment.discussion_end_date|date:"d/m/Y H:i" }}{% endblock %}
+
+{% block grading-default-date %}{{ assignment.grading_end_date|date:"d/m/Y H:i" }}{% endblock %}
+
+{% block criterias %}
+
+{% for criteria in criterias %}
+
+<div class="row criteria" data-id={{criteria.id}}>
+    <div class="col-sm-10">
+        <input type="description" class="form-control" placeholder="Descrição" value="{{criteria.text}}">
+    </div>
+
+    <div class="col-sm-2">
+        <input type="weight" class="form-control" placeholder="Peso" value="{{criteria.weight}}">
+    </div>
+</div>
+
+{% endfor %}
+
+{% endblock %}

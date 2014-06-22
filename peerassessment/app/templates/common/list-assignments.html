@@ -53,7 +53,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-10">
+                <div class="col-sm-8">
 
                     <div class="row activity-subtitle">
                         <div class="col-sm-12">
@@ -66,11 +66,11 @@
                         </div>
                     </div>
                     <div class="row mute margin-10">
-                        <div class="col-sm-4">Fase</div>
-                        <div class="col-sm-4">Deadline</div>
+                        <div class="col-sm-6">Fase</div>
+                        <div class="col-sm-6">Deadline</div>
                     </div>
                     <div class="row common">
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
 
                         {% if assignment.stage == "Submission" %}
                             Submissão
@@ -83,7 +83,7 @@
                         {% endif %}
 
                         </div>
-                        <div class="col-sm-8">
+                        <div class="col-sm-6">
 
                             {% if assignment.stage == "Submission" %}
                                 {{assignment.submission_end_date}}
@@ -99,6 +99,14 @@
                     </div>
 
                 </div>
+
+                <div class="col-sm-2">
+
+                    {% block assignment_button_group %}
+                    {% endblock %}
+
+                </div>
+
             </div>
         </div>
 
