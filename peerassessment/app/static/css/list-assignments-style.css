@@ -111,3 +111,14 @@
     text-transform: uppercase;
     color: #8D8B8B;
 }
+
+.assignment-settings-group {
+    margin-right: 3px;
+    font-size: 20px;
+}
+
+.assignment-settings-group a {
+    display: block;
+    color: #767676;
+    margin: 2px;
+}

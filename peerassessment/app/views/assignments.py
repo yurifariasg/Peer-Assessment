@@ -212,6 +212,122 @@ def create(request):
 
 @require_http_methods(["POST"])
 @login_required_ajax()
+@types_required(["professor"])
+@ajax_endpoint
+def edit(request):
+    """
+        Edit an assignment endpoint
+        The API shall receive the name of the assignment,
+        the end date for each stage: Submission, Discussion,
+        Grading, the criterias and their weight in the final grade.
+        The content should be a json in the following format:
+        {
+            "id" : assignment_id
+            "name" : "Assignment Name",
+            "submission_end_date" : "Y-m-dTH:M:S",
+            "discussion_end_date" : "Y-m-dTH:M:S",
+            "grading_end_date" : "Y-m-dTH:M:S",
+            "criterias" : [
+                 {"id" : id, "name" : "Criteria Name", "weight" : 1.0}
+            ]
+        }
+        Criterias weight must sum to 1.0.
+        The criteria id is optional, if not provided, a new criteria will be created.
+        All criterias should be specified on the request, otherwise they will be deleted.
+    """
+    json_body = json.loads(request.body)
+
+    def get_date(parameter):
+        if json_body.get(parameter):
+            parameter_date = datetime.datetime.strptime(json_body.get(parameter), '%Y-%m-%dT%H:%M:%S')
+            return parameter_date
+        else:
+            raise ValidationError({parameter : ["parameter does not exist."]})
+
+    name = json_body.get("name")
+    submission_end_date = get_date("submission_end_date")
+    discussion_end_date = get_date("discussion_end_date")
+    grading_end_date = get_date("grading_end_date")
+
+    json_criterias = json_body.get("criterias", [])
+    criterias = []
+
+    weight_sum = 0.0
+
+    for criteria in json_criterias:
+        criteria_id = criteria.get("id", None)
+        criteria_name = criteria.get("name", None)
+        criteria_weight = criteria.get("weight", None)
+
+        try:
+            criteria_weight = float(criteria_weight)
+            weight_sum += criteria_weight
+            criterias.append({"id" : criteria_id, "name" : criteria_name, "weight" : criteria_weight })
+        except ValueError:
+            raise ValidationError({"weight" : ["not a valid float value"]})
+
+    if abs(weight_sum - 1.0) > 0.001:
+        raise ValidationError({"weight_sum" : [ "sum must be 1.0, it is " + str(weight_sum) ]})
+
+    try:
+        edited_criterias = []
+        assignment = Assignment.objects.get(id = json_body.get("id"))
+
+        if name:
+            assignment.name = name
+
+        if submission_end_date:
+            assignment.submission_end_date = submission_end_date
+
+        if discussion_end_date:
+            assignment.discussion_end_date = discussion_end_date
+
+        if grading_end_date:
+            assignment.grading_end_date = grading_end_date
+
+        assignment.full_clean()
+        assignment.save()
+
+        for criteria in criterias:
+            if criteria.get("id"):
+                model_criteria = AssignmentCriteria.objects.get(id = criteria["id"])
+                model_criteria.text = criteria["name"]
+                model_criteria.weight = criteria["weight"]
+            else:
+                model_criteria = AssignmentCriteria(\
+                    text = criteria["name"], weight = criteria["weight"], assignment = assignment)
+
+            model_criteria.full_clean()
+            model_criteria.save()
+            edited_criterias.append(model_criteria)
+
+        # Now, delete criterias that were not send on the request
+        all_model_assignment_criterias = AssignmentCriteria.objects.filter(assignment = assignment)
+        for criteria in all_model_assignment_criterias:
+            wasEdited = False
+            for edited_criteria in edited_criterias:
+                if criteria.id == edited_criteria.id:
+                    wasEdited = True
+                    break
+
+            if not wasEdited:
+                criteria.delete()
+
+        # Now, update the assignment stage.
+        assignment.updateStage()
+
+
+        assignment.save()
+
+
+
+    except Exception as e:
+        raise e
+
+    return { }
+
+@require_http_methods(["POST"])
+@login_required_ajax()
 @types_required(["student"])
 @ajax_endpoint
 def send_messages(request):

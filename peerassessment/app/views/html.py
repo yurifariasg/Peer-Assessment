@@ -22,7 +22,7 @@ def signup(request):
     """
         Signup endpoint.
 
-        This is the endpoint for the user signup 
+        This is the endpoint for the user signup
     """
     return render_to_response("signup.html")
 
@@ -125,14 +125,22 @@ def submit_assignment_page(request, assignment_id):
     return render_to_response("student/submit_assignment.html", \
         {'user': request.user, 'criterias': criterias, 'assignment': assignment})
 
+@login_required()
+@types_required(["professor"])
+def edit_assignment_page(request, assignment_id):
+    """
+        Edit Assignment endpoint.
+
+        This pages allows the user to edit an existing assignment.
+    """
+    assignment = get_object_or_404(Assignment, id=assignment_id)
+    criterias = AssignmentCriteria.objects.filter(assignment = assignment).all()
+
+    return render_to_response("professor/edit_assignment.html", \
+        {'user' : request.user, 'assignment' : assignment, 'criterias' : criterias})
 
 @login_required()
 @types_required(["professor"])
 def create_course_page(request):
     return render_to_response("professor/create_course.html", \
         {'user': request.user})
-
-
-
-
-

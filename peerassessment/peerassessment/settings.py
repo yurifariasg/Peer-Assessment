@@ -82,6 +82,10 @@ DATABASES = {
     }
 }
 
+# The Date format to be shown on Templates (when not overriden)
+DATETIME_FORMAT = "G:i - j/n \d\e Y"
+# DATE_FORMAT = "N Y"
+
 # Logging configuration
 # https://docs.djangoproject.com/en/dev/topics/logging/
 # This is a simple Debug logging configuration
@@ -122,13 +126,13 @@ LOGGING = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
