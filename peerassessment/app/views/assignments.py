@@ -1,4 +1,5 @@
 from common import *
+from django.utils.timezone import utc, is_aware, make_aware
 
 # Endpoints here are related to assignments.
 
@@ -141,12 +142,14 @@ def create(request):
              ]
          }
          Criterias weight must sum to 1.0.
+         Dates must be in UTC.
     """
     json_body = json.loads(request.body)
 
     def get_date(parameter):
         if json_body.get(parameter):
             parameter_date = datetime.datetime.strptime(json_body.get(parameter), '%Y-%m-%dT%H:%M:%S')
+            parameter_date = make_aware(parameter_date, utc)
             return parameter_date
         else:
             raise ValidationError({parameter : ["parameter does not exist."]})
@@ -234,12 +237,14 @@ def edit(request):
         Criterias weight must sum to 1.0.
         The criteria id is optional, if not provided, a new criteria will be created.
         All criterias should be specified on the request, otherwise they will be deleted.
+        Dates must be in UTC.
     """
     json_body = json.loads(request.body)
 
     def get_date(parameter):
         if json_body.get(parameter):
             parameter_date = datetime.datetime.strptime(json_body.get(parameter), '%Y-%m-%dT%H:%M:%S')
+            parameter_date = make_aware(parameter_date, utc)
             return parameter_date
         else:
             raise ValidationError({parameter : ["parameter does not exist."]})

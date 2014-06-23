@@ -3,7 +3,7 @@ import json
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
-import datetime
+from django.utils import timezone
 
 # Place our models here
 
@@ -100,7 +100,7 @@ class Assignment(PAModel):
     owner = models.ForeignKey('Professor')
 
     def updateStage(self):
-        current_date = datetime.datetime.now()
+        current_date = timezone.now()
         if current_date > self.submission_end_date:
             if current_date > self.discussion_end_date:
                 if current_date > self.grading_end_date:

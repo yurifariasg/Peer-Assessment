@@ -66,11 +66,11 @@
                         </div>
                     </div>
                     <div class="row mute margin-10">
-                        <div class="col-sm-6">Fase</div>
-                        <div class="col-sm-6">Deadline</div>
+                        <div class="col-sm-4">Fase</div>
+                        <div class="col-sm-8">Deadline</div>
                     </div>
                     <div class="row common">
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
 
                         {% if assignment.stage == "Submission" %}
                             Submissão
@@ -83,14 +83,16 @@
                         {% endif %}
 
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-8">
+                            {% load tz %}
+
 
                             {% if assignment.stage == "Submission" %}
-                                {{assignment.submission_end_date}}
+                                {{assignment.submission_end_date|localtime}}
                             {% elif assignment.stage == "Discussion" %}
-                                {{assignment.discussion_end_date}}
+                                {{assignment.discussion_end_date|localtime}}
                             {% elif assignment.stage == "Grading" %}
-                                {{assignment.grading_end_date}}
+                                {{assignment.grading_end_date|localtime}}
                             {% else %}
                                 ---
                             {% endif %}

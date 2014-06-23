@@ -9,16 +9,19 @@
   <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" media="screen" type="text/css" />
   <link rel="stylesheet" href="{% static 'css/base.css' %}" media="screen" type="text/css" />
   <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}" media="screen" type="text/css" />
+  <link rel="icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
   {% block stylesheets %}{% endblock %}
   <title>{% block title %}Peer Assessment{% endblock %}</title>
 
 </head>
 
 <body>
+    {% load tz %}
+    {% timezone "America/Recife" %}
 
 	<section id="heading">
 		<header class="top-header clearfix">
-			<div class="logo"> <a href="/"> Peer Assessment </a> </div>
+			<div class="logo"><a href="/"> Peer Assessment </a><span class="badge beta">Beta</span></div>
 			<div class="top-nav">
 				<ul class="nav-left list-unstyled">
 
@@ -105,6 +108,7 @@
 			{% endblock %}
 		</div>
 	</section>
+    {% endtimezone %}
 	<!-- Scripts -->
 	<script src="{% static 'js/jquery-1.11.1.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>

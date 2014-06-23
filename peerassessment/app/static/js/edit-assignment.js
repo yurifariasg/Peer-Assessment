@@ -104,9 +104,9 @@ $("#createAssignment").click(function(event) {
 
     var dateFormat = 'YYYY-MM-DDTHH:mm:SS';
 
-    var submission_end_date = $("#submission-picker").data("DateTimePicker").getDate();
-    var discussion_end_date = $("#discussion-picker").data("DateTimePicker").getDate();
-    var grading_end_date = $("#grading-picker").data("DateTimePicker").getDate();
+    var submission_end_date = $("#submission-picker").data("DateTimePicker").getDate().utc();
+    var discussion_end_date = $("#discussion-picker").data("DateTimePicker").getDate().utc();
+    var grading_end_date = $("#grading-picker").data("DateTimePicker").getDate().utc();
     var id = $("#assignment").data('id');
 
     var assignment = {

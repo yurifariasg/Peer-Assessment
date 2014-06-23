@@ -83,7 +83,7 @@ DATABASES = {
 }
 
 # The Date format to be shown on Templates (when not overriden)
-DATETIME_FORMAT = "G:i - j/n \d\e Y"
+DATETIME_FORMAT = "j \d\e N \d\e Y G\h i\m" # "G:i - j/n \d\e Y"
 # DATE_FORMAT = "N Y"
 
 # Logging configuration
@@ -135,6 +135,7 @@ USE_I18N = True
 USE_L10N = False
 
 USE_TZ = True
+
 
 if not HEROKU:
 

@@ -115,7 +115,7 @@ border-radius: 10px;
 .logo {
 	height: 50px;
 	display: inline-block;
-    width: 220px;
+    width: 280px;
     background-color: transparent;
     border-right: 1px solid rgba(255, 255, 255, 0.1);
     text-align: center;
@@ -124,6 +124,10 @@ border-radius: 10px;
     vertical-align: middle;
     color: #fafafa;
     position: absolute;
+
+    /*padding-left: 50px;*/
+    /*margin-right: 40px;*/
+    padding-right: 25px;
 
 }
 
@@ -262,4 +266,10 @@ width: 35px;
 height: 35px;
 font-size: 16px;
 line-height: 35px;
+}
+
+.beta {
+    position: absolute;
+    right: 30px;
+    top: 10px;
 }

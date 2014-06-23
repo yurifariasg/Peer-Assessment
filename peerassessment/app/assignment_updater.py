@@ -30,10 +30,6 @@ def update_assignments():
             assignment.grading_end_date < now:
             needs_update_grading.append(assignment)
 
-    print str(len(needs_update_submission)) + " needs to update from submission"
-    print str(len(needs_update_discussion)) + " needs to update from discussion"
-    print str(len(needs_update_grading)) + " needs to update from grading"
-
     for assignment in needs_update_submission:
         # Should do the allocation
         allocate(assignment)
