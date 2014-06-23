@@ -97,6 +97,10 @@
     text-transform: uppercase;
 }
 
+.activity-title a {
+    color: #8D8B8B;
+}
+
 .common {
     font-size: 17px;
     color: #8D8B8B;

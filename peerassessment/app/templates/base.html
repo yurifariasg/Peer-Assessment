@@ -19,95 +19,103 @@
     {% load tz %}
     {% timezone "America/Recife" %}
 
-	<section id="heading">
-		<header class="top-header clearfix">
-			<div class="logo"><a href="/"> Peer Assessment </a><span class="badge beta">Beta</span></div>
-			<div class="top-nav">
-				<ul class="nav-left list-unstyled">
+    <div class="wrap">
+    	<section id="heading">
+    		<header class="top-header clearfix">
+    			<div class="logo"><a href="/"> Peer Assessment </a><span class="badge beta">Beta</span></div>
+    			<div class="top-nav">
+    				<ul class="nav-left list-unstyled">
 
-				</ul>
+    				</ul>
 
-				<ul class="nav-right pull-right list-unstyled">
+    				<ul class="nav-right pull-right list-unstyled">
 
-					<li class="dropdown">
-	                <a> {{ user.first_name }} {{ user.last_name }}</a>
-	            	</li>
-					<!--  -->
-					<li id="notification" class="dropdown">
-		                <a onclick='showNotification();' href="javascript:;" class="bg-bell">
-		                	<i class="fa fa-bell-o"></i>
-		                	<span class="badge badge-info">{{ notifications_count }}</span>
-		                </a>
+    					<li class="dropdown">
+    	                <a> {{ user.first_name }} {{ user.last_name }}</a>
+    	            	</li>
+    					<!--  -->
+    					<li id="notification" class="dropdown">
+    		                <a onclick='showNotification();' href="javascript:;" class="bg-bell">
+    		                	<i class="fa fa-bell-o"></i>
+    		                	<span class="badge badge-info">{{ notifications_count }}</span>
+    		                </a>
 
-		                <div class="dropdown-menu pull-right with-arrow panel panel-default">
-		                    <div class="panel-heading">
-		                        Notifications
-		                    </div>
-		                    <ul class="list-group">
-								 {% block notifications_block %}
+    		                <div class="dropdown-menu pull-right with-arrow panel panel-default">
+    		                    <div class="panel-heading">
+    		                        Notifications
+    		                    </div>
+    		                    <ul class="list-group">
+    								 {% block notifications_block %}
 
-								<li class="list-group-item">
-                            		<a href="javascript:;" class="media">
-                                		<span class="pull-left media-icon">
-                                    	<span class="round-icon sm bg-success"><i class="fa fa-bell-o"></i></span>
-                                		</span>
-		                                <div class="media-body">
-		                                    <span class="block">No tasks to be done</span>
-								 {% endblock %}
-		                    </ul>
-		                    <div class="panel-footer">
-		                        <a href="javascript:;">Show all notifications.</a>
-		                    </div>
-                		</div>
-                <!--  -->
-	            	</li>
+    								<li class="list-group-item">
+                                		<a href="javascript:;" class="media">
+                                    		<span class="pull-left media-icon">
+                                        	<span class="round-icon sm bg-success"><i class="fa fa-bell-o"></i></span>
+                                    		</span>
+    		                                <div class="media-body">
+    		                                    <span class="block">No tasks to be done</span>
+    								 {% endblock %}
+    		                    </ul>
+    		                    <div class="panel-footer">
+    		                        <a href="javascript:;">Show all notifications.</a>
+    		                    </div>
+                    		</div>
+                    <!--  -->
+    	            	</li>
 
-					<li class="dropdown">
-		                <a class="bg-menu">
-		                	<i class="fa fa-bars"></i>
-		                </a>
-	            	</li>
-	            	<li id="settings" class="dropdown">
-		                <a onclick="showSettings();" href="javascript:;" class="bg-settings">
-		                	<i class="fa fa-cogs"></i>
-		                </a>
+    					<li class="dropdown">
+    		                <a class="bg-menu">
+    		                	<i class="fa fa-bars"></i>
+    		                </a>
+    	            	</li>
+    	            	<li id="settings" class="dropdown">
+    		                <a onclick="showSettings();" href="javascript:;" class="bg-settings">
+    		                	<i class="fa fa-cogs"></i>
+    		                </a>
 
-                        <div class="dropdown-menu pull-right with-arrow panel panel-default">
-                            <div class="panel-heading">
-                                Settings
+                            <div class="dropdown-menu pull-right with-arrow panel panel-default">
+                                <div class="panel-heading">
+                                    Settings
+                                </div>
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <a onclick="logout();" href="javascript:;" class="media">
+                                            <span class="pull-left media-icon">
+                                            <span class="round-icon sm bg-success"><i class="fa fa-sign-out"></i></span>
+                                            </span>
+                                            <div class="media-body">
+                                                <span class="block">Logout</span>
+
+                                            </div>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                                <!-- <div class="panel-footer">
+                                    <a href="javascript:;">Show all notifications.</a>
+                                </div> -->
                             </div>
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <a onclick="logout();" href="javascript:;" class="media">
-                                        <span class="pull-left media-icon">
-                                        <span class="round-icon sm bg-success"><i class="fa fa-sign-out"></i></span>
-                                        </span>
-                                        <div class="media-body">
-                                            <span class="block">Logout</span>
+    	            	</li>
+    				</ul>
+    			</div>
 
-                                        </div>
-                                    </a>
-                                </li>
+    		</header>
 
-                            </ul>
-                            <!-- <div class="panel-footer">
-                                <a href="javascript:;">Show all notifications.</a>
-                            </div> -->
-                        </div>
-	            	</li>
-				</ul>
-			</div>
+    	</section>
 
-		</header>
-
-	</section>
-
-	<section id="content">
-		<div class="container">
-			{% block main_container %}
-			{% endblock %}
-		</div>
-	</section>
+        <section id="content">
+    		<div class="container">
+    			{% block main_container %}
+    			{% endblock %}
+    		</div>
+    	</section>
+    </div>
+    <div class="footer">
+        Peer Assessment Project</br>
+        Designed and built by
+        <a href="http://twitter.com/yurifariasg" target="_blank">@yurifariasg</a> and
+        <a href="http://twitter.com/tferreirap" target="_blank">@tferreirap</a>.</br>
+    </div>
     {% endtimezone %}
 	<!-- Scripts -->
 	<script src="{% static 'js/jquery-1.11.1.js' %}"></script>

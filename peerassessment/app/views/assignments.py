@@ -1,5 +1,4 @@
 from common import *
-from django.utils.timezone import utc, is_aware, make_aware
 
 # Endpoints here are related to assignments.
 
@@ -146,18 +145,10 @@ def create(request):
     """
     json_body = json.loads(request.body)
 
-    def get_date(parameter):
-        if json_body.get(parameter):
-            parameter_date = datetime.datetime.strptime(json_body.get(parameter), '%Y-%m-%dT%H:%M:%S')
-            parameter_date = make_aware(parameter_date, utc)
-            return parameter_date
-        else:
-            raise ValidationError({parameter : ["parameter does not exist."]})
-
     name = json_body.get("name")
-    submission_end_date = get_date("submission_end_date")
-    discussion_end_date = get_date("discussion_end_date")
-    grading_end_date = get_date("grading_end_date")
+    submission_end_date = get_date("submission_end_date", json_body)
+    discussion_end_date = get_date("discussion_end_date", json_body)
+    grading_end_date = get_date("grading_end_date", json_body)
 
     json_criterias = json_body.get("criterias", [])
     criterias = []
@@ -241,18 +232,10 @@ def edit(request):
     """
     json_body = json.loads(request.body)
 
-    def get_date(parameter):
-        if json_body.get(parameter):
-            parameter_date = datetime.datetime.strptime(json_body.get(parameter), '%Y-%m-%dT%H:%M:%S')
-            parameter_date = make_aware(parameter_date, utc)
-            return parameter_date
-        else:
-            raise ValidationError({parameter : ["parameter does not exist."]})
-
     name = json_body.get("name")
-    submission_end_date = get_date("submission_end_date")
-    discussion_end_date = get_date("discussion_end_date")
-    grading_end_date = get_date("grading_end_date")
+    submission_end_date = get_date("submission_end_date", json_body)
+    discussion_end_date = get_date("discussion_end_date", json_body)
+    grading_end_date = get_date("grading_end_date", json_body)
 
     json_criterias = json_body.get("criterias", [])
     criterias = []
@@ -321,10 +304,7 @@ def edit(request):
         # Now, update the assignment stage.
         assignment.updateStage()
 
-
         assignment.save()
-
-
 
     except Exception as e:
         raise e
@@ -366,7 +346,6 @@ def send_messages(request):
 
     for message in messages:
 
-        ## TODO: Assert that this criteria is from this assignment.
         criteria = get_criteria(message.get("criteria"))
         if criteria.assignment != assignment:
             raise ValidationError({"criteria" : ["Criteria not from assignment."]})

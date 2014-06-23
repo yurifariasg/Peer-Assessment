@@ -17,6 +17,7 @@ from django.http import Http404
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 import datetime
+from django.utils.timezone import utc, is_aware, make_aware
 try:
     from functools import wraps
 except:
@@ -95,3 +96,12 @@ def get_peer(peer_num, allocation):
     elif peer_num == 5:
         return allocation.peer5
     return None
+
+
+def get_date(parameter, json_body):
+    if json_body.get(parameter):
+        parameter_date = datetime.datetime.strptime(json_body.get(parameter), '%Y-%m-%dT%H:%M:%S')
+        parameter_date = make_aware(parameter_date, utc)
+        return parameter_date
+    else:
+        raise ValidationError({parameter : ["parameter does not exist."]})

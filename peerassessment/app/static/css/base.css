@@ -8,7 +8,11 @@ body {
     font-size: 14px;
     line-height: 1.42857;
     color: #767676;
-    background-color: #f3f3f3;
+    background-color: #f3f3f3
+}
+
+html, body {
+    height: 100%;
 }
 
 section#heading {
@@ -272,4 +276,22 @@ line-height: 35px;
     position: absolute;
     right: 30px;
     top: 10px;
+}
+
+.wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -60px;
+    padding-bottom: 60px;
+}
+
+.footer {
+    height: 60px;
+    text-align: center;
+    background-color: #323d54;
+    color: #fafafa;
+    vertical-align: middle;
+    padding-top: 12px;
+    /*padding: 15px;*/
 }

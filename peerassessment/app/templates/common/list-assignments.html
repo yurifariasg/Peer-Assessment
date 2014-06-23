@@ -32,22 +32,29 @@
             <div class="row">
                 <div class="col-sm-2 icon-block">
                     <div class="center-block activity-icon">
-
                         {% if assignment.stage == "Submission" %}
                             <div class="assignment-round-icon submission-color">
-                                <i class="fa fa-arrow-circle-o-down assignment-icon-fa"></i>
+                                <a href="assignment/{{assignment.id}}/submit">
+                                    <i class="fa fa-arrow-circle-o-down assignment-icon-fa"></i>
+                                </a>
                             </div>
                         {% elif assignment.stage == "Discussion" %}
                             <div class="assignment-round-icon discussion-color">
-                                <i class="fa fa-comment-o assignment-icon-fa"></i>
+                                <a href="assignment/{{assignment.id}}/discussion">
+                                    <i class="fa fa-comment-o assignment-icon-fa"></i>
+                                </a>
                             </div>
                         {% elif assignment.stage == "Grading" %}
                             <div class="assignment-round-icon grading-color">
-                                <i class="fa fa-pencil assignment-icon-fa"></i>
+                                <a href="assignment/{{assignment.id}}/grading">
+                                    <i class="fa fa-pencil assignment-icon-fa"></i>
+                                </a>
                             </div>
                         {% else %}
                             <div class="assignment-round-icon closed-color">
-                                <i class="fa fa-lock assignment-icon-fa"></i>
+                                <a href="assignment/{{assignment.id}}">
+                                    <i class="fa fa-lock assignment-icon-fa"></i>
+                                </a>
                             </div>
                         {% endif %}
                     </div>
@@ -62,7 +69,17 @@
                     </div>
                     <div class="row activity-title">
                         <div class="col-sm-12">
-                        {{assignment.name}}
+                            {% if assignment.stage == "Submission" %}
+                            <a href="assignment/{{assignment.id}}/submit">
+                            {% elif assignment.stage == "Discussion" %}
+                            <a href="assignment/{{assignment.id}}/discussion">
+                            {% elif assignment.stage == "Grading" %}
+                            <a href="assignment/{{assignment.id}}/grading">
+                            {% else %}
+                            <a href="assignment/{{assignment.id}}">
+                            {% endif %}
+                            {{assignment.name}}
+                            </a>
                         </div>
                     </div>
                     <div class="row mute margin-10">
