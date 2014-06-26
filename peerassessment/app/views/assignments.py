@@ -88,29 +88,40 @@ def grade(request):
     json_grades = json_body.get("grades", [])
 
     requesting_student = request.user.student
-    assignment = Assignment.get(id=assignment_id)
-    allocation = Allocation.get(assignment=assignment, student=requesting_student)
-
-
+    assignment = Assignment.objects.get(id=assignment_id)
+    allocation = Allocation.objects.get(assignment=assignment, student=requesting_student)
 
     grades = []
 
-    for peer_body in json_body:
+    for peer_body in json_grades:
         peer_id = peer_body.get("peer")
         peer_grades = peer_body.get("grades", [])
 
-        for peer_grade in peer_grandes:
+        for peer_grade in peer_grades:
 
             # assert criteria is from this assignment
-            criteria = peer_grade.get("criteria", -1)
+            criteria_id = peer_grade.get("criteria", -1)
+            criteria = AssignmentCriteria.objects.get(id = criteria_id)
 
-            grade = Grade( \
-                grade = peer_grade.get("grade"), \
+            existing_grade = Grade.objects.filter(\
                 assignment = assignment, \
                 owner = requesting_student, \
                 student = get_peer(peer_id, allocation), \
                 criteria = criteria \
-            )
+            ).first()
+
+            if existing_grade:
+                grade = existing_grade
+                grade.grade = peer_grade.get("grade")
+            else:
+                grade = Grade( \
+                    grade = peer_grade.get("grade"), \
+                    assignment = assignment, \
+                    owner = requesting_student, \
+                    student = get_peer(peer_id, allocation), \
+                    criteria = criteria \
+                )
+
             grade.full_clean()
             grades.append(grade)
 
@@ -302,7 +313,7 @@ def edit(request):
                 criteria.delete()
 
         # Now, update the assignment stage.
-        assignment.updateStage()
+        assignment.update_stage()
 
         assignment.save()
 

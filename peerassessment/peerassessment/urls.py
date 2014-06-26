@@ -15,11 +15,13 @@ urlpatterns = patterns('',
     url(r'^assignment/edit$', 'app.views.assignments.edit'),
     url(r'^assignment/submit$', 'app.views.assignments.submit'),
     url(r'^assignment/message$', 'app.views.assignments.send_messages'),
+    url(r'^assignment/grade$', 'app.views.assignments.grade'),
 
     # HTML Endpoints
     url(r'^signup/$', 'app.views.html.signup'),
     url(r'^student/$', 'app.views.html.student_dashboard'),
     url(r'^student/assignment/(?P<assignment_id>\d+)/discussion$','app.views.html.discussion_page'),
+    url(r'^student/assignment/(?P<assignment_id>\d+)/grading$','app.views.html.grading_page'),
     url(r'^student/assignment/(?P<assignment_id>\d+)/submit$', 'app.views.html.submit_assignment_page'),
     url(r'^professor/$', 'app.views.html.professor_dashboard'),
     url(r'^professor/assignment/create$', 'app.views.html.create_assignment_page'),

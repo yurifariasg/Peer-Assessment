@@ -90,6 +90,77 @@ def discussion_page(request, assignment_id = None):
         'messages' : content,
         'submissions' : submissions})
 
+
+
+@login_required()
+@types_required(["student"])
+def grading_page(request, assignment_id = None):
+    """
+        Student Discussion endpoint.
+        This is the endpoint for the student's discussion on a assignment
+    """
+    assignment = get_object_or_404(Assignment, id=assignment_id)
+    allocation = get_object_or_404(Allocation, student = request.user.student, assignment = assignment)
+    criterias = AssignmentCriteria.objects.filter(assignment = assignment).all()
+    request_student = request.user.student
+
+    submissions = {
+        1 : Submission.objects.get(assignment = assignment, student = get_peer(1, allocation)).url,
+        2 : Submission.objects.get(assignment = assignment, student = get_peer(2, allocation)).url,
+        3 : Submission.objects.get(assignment = assignment, student = get_peer(3, allocation)).url,
+        4 : Submission.objects.get(assignment = assignment, student = get_peer(4, allocation)).url,
+        5 : Submission.objects.get(assignment = assignment, student = get_peer(5, allocation)).url
+    }
+
+    content = {
+        'user' : request.user,
+        'assignment' : assignment,
+        'peers' : {
+            1 : [],
+            2 : [],
+            3 : [],
+            4 : [],
+            5 : []
+        }
+    }
+
+    grades = {
+        1 : {},
+        2 : {},
+        3 : {},
+        4 : {},
+        5 : {}
+    }
+
+    for criteria in criterias:
+        for peer_id in content['peers'].keys():
+
+            peer_student = get_peer(peer_id, allocation)
+
+            messages = Message.objects.filter( \
+                Q(owner = request_student, recipient = peer_student, criteria = criteria) |
+                Q(owner = peer_student, recipient = request_student, criteria = criteria) \
+                ).order_by('date').all()
+
+            gradeModel = Grade.objects.filter( \
+                assignment = assignment, student = peer_student, \
+                owner = request_student, criteria = criteria).first()
+            if gradeModel != None:
+                grade = gradeModel.grade
+
+            grades[peer_id][criteria.id] = grade
+
+            content['peers'][peer_id].append( \
+                {"criteria" : criteria, \
+                "messages": messages}
+            )
+    return render_to_response("student/grading.html", \
+        {'user': request.user, \
+        'assignment' : assignment, \
+        'messages' : content,
+        'submissions' : submissions,
+        'grades' : grades})
+
 @login_required()
 @types_required(["professor"])
 def professor_dashboard(request):

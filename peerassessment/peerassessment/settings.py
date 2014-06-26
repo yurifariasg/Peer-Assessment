@@ -30,9 +30,13 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Peer-Assessment Specific Options
+
 JOB_UPDATER_TIMER = 1
 if HEROKU:
     JOB_UPDATER_TIMER = 10
+
+FORCE_5_STUDENTS_MINIMUM_ALLOCATION = False
 
 
 # Application definition
@@ -108,7 +112,7 @@ LOGGING = {
         }
     },
     'loggers': {
-        'django': {
+        'django.request': {
             'handlers': ['console'],
             'filters': [],
             'propagate': True,

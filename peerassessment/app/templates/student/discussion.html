@@ -83,18 +83,17 @@
 
                             {% endfor %}
 
+                            {% block discussion-input %}
+
                             <div class="comment-input input-group" data-criteria="{{criteria_messages.criteria.id}}" data-peer="{{peer}}">
                                     <textarea type="comment" class="form-control" placeholder="Comment..."></textarea>
                                     <span class="input-group-btn">
                                         <button class="btn btn-default btn-send" type="button">
                                             <i id="send-icon-template" class="fa fa-send"></i>
-
                                         </button>
-
-
-
                                     </span>
                             </div>
+                            {% endblock %}
                         </div>
                     </div>
 

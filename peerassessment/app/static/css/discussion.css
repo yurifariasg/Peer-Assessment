@@ -17,6 +17,15 @@
     height: 34px;
 }
 
+.comment-input label {
+    line-height: 34px;
+}
+
+.has-feedback .form-control-feedback {
+    top: 0px;
+    z-index: 2;
+}
+
 .item {
     padding-left: 20px;
     padding-right: 20px;
@@ -117,6 +126,7 @@
 }
 
 .comment-input {
+    width: 100%;
 }
 
 .comment-input .form-control {

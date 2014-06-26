@@ -1,0 +1,26 @@
+{% extends "student/discussion.html" %}
+
+{% load dictionary_extras %}
+
+{% block discussion-input %}
+
+<div class="comment-input input-group" data-criteria="{{criteria_messages.criteria.id}}" data-peer="{{peer}}">
+    <div class="form-group comment-input">
+        <label class="col-xs-1 col-xs-offset-4 control-label">Nota</label>
+        <div class="col-xs-2">
+            <div class="form-group has-feedback">
+                {% if grades|access:peer|access:criteria_messages.criteria.id %}
+                    <input type="grade" class="form-control"
+                        value="{{grades|access:peer|access:criteria_messages.criteria.id}}">
+                {% else %}
+                    <input type="grade" class="form-control">
+                {% endif %}
+              <span class="glyphicon glyphicon-remove form-control-feedback" style="display:none;"></span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-default btn-save-grade col-xs-2">Save</button>
+    </div>
+</div>
+
+{% endblock %}
