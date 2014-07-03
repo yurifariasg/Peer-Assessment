@@ -49,14 +49,9 @@ def discussion_page(request, assignment_id = None):
     allocation = get_object_or_404(Allocation, student = request.user.student, assignment = assignment)
     criterias = AssignmentCriteria.objects.filter(assignment = assignment).all()
     request_student = request.user.student
+    request_student_submission = Submission.objects.get(assignment = assignment, student = request_student)
 
-    submissions = {
-        1 : Submission.objects.get(assignment = assignment, student = get_peer(1, allocation)).url,
-        2 : Submission.objects.get(assignment = assignment, student = get_peer(2, allocation)).url,
-        3 : Submission.objects.get(assignment = assignment, student = get_peer(3, allocation)).url,
-        4 : Submission.objects.get(assignment = assignment, student = get_peer(4, allocation)).url,
-        5 : Submission.objects.get(assignment = assignment, student = get_peer(5, allocation)).url
-    }
+    submissions = assignment_service.get_submissions_of_peers(assignment = assignment, allocation = allocation)
 
     content = {
         'user' : request.user,
@@ -73,24 +68,24 @@ def discussion_page(request, assignment_id = None):
     for criteria in criterias:
         for peer_id in content['peers'].keys():
 
-            peer_student = get_peer(peer_id, allocation)
+            peer_submission = submissions[peer_id]
 
-            messages = Message.objects.filter( \
-                Q(owner = request_student, recipient = peer_student, criteria = criteria) |
-                Q(owner = peer_student, recipient = request_student, criteria = criteria) \
-                ).order_by('date').all()
+            messages = message_service.get_messages_for(peer_submission, criteria,\
+                request.user.student)
 
             content['peers'][peer_id].append( \
                 {"criteria" : criteria, \
-                "messages": messages}
-            )
+                "messages": messages})
+
+    # Get only URLs
+    #for key in submissions:
+    #    submissions[key] = submissions[key].url
+
     return render_to_response("student/discussion.html", \
         {'user': request.user, \
         'assignment' : assignment, \
-        'messages' : content,
+        'messages' : content, \
         'submissions' : submissions})
-
-
 
 @login_required()
 @types_required(["student"])
@@ -103,14 +98,10 @@ def grading_page(request, assignment_id = None):
     allocation = get_object_or_404(Allocation, student = request.user.student, assignment = assignment)
     criterias = AssignmentCriteria.objects.filter(assignment = assignment).all()
     request_student = request.user.student
+    request_student_submission = Submission.objects.get(assignment = assignment, student = request_student)
 
-    submissions = {
-        1 : Submission.objects.get(assignment = assignment, student = get_peer(1, allocation)).url,
-        2 : Submission.objects.get(assignment = assignment, student = get_peer(2, allocation)).url,
-        3 : Submission.objects.get(assignment = assignment, student = get_peer(3, allocation)).url,
-        4 : Submission.objects.get(assignment = assignment, student = get_peer(4, allocation)).url,
-        5 : Submission.objects.get(assignment = assignment, student = get_peer(5, allocation)).url
-    }
+
+    submissions = assignment_service.get_submissions_of_peers(assignment = assignment, allocation = allocation)
 
     content = {
         'user' : request.user,
@@ -138,15 +129,16 @@ def grading_page(request, assignment_id = None):
             peer_student = get_peer(peer_id, allocation)
 
             messages = Message.objects.filter( \
-                Q(owner = request_student, recipient = peer_student, criteria = criteria) |
-                Q(owner = peer_student, recipient = request_student, criteria = criteria) \
+                owner = request_student, submission = submissions[peer_id], criteria = criteria\
                 ).order_by('date').all()
 
             gradeModel = Grade.objects.filter( \
-                assignment = assignment, student = peer_student, \
+                assignment = assignment, submission = submissions[peer_id], \
                 owner = request_student, criteria = criteria).first()
             if gradeModel != None:
                 grade = gradeModel.grade
+            else:
+                grade = None
 
             grades[peer_id][criteria.id] = grade
 

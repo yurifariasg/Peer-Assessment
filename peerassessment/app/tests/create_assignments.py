@@ -53,39 +53,43 @@ def test():
         print student_request.text
         assert(student_request.status_code == 400) # BadRequest
 
+    # Wait for the assignment updates its stage to discussion....
     time.sleep(60)
 
     print "Sending Messages..."
     for student in STUDENTS_CREDENTIALS:
 
-        message = {
-            "assignment_id" : assignment_id,
-            "messages" : [{
-                "peer" : 1,
-                "criteria" : criteria_id,
-                "message" : "to peer 1"
-            },
-            {
-                "peer" : 2,
-                "criteria" : criteria_id,
-                "message" : "to peer 2"
-            },
-            {
-                "peer" : 3,
-                "criteria" : criteria_id,
-                "message" : "to peer 3"
-            },
-            {
-                "peer" : 4,
-                "criteria" : criteria_id,
-                "message" : "to peer 4"
-            },
-            {
-                "peer" : 5,
-                "criteria" : criteria_id,
-                "message" : "to peer 5"
-            }]
-        }
+        # Gets the student allocation
+        student_request = requests.get(BASE_URL + "/assignment/" + str(assignment_id) + \
+            "/allocation", cookies = student["cookies"])
+
+        allocation = json.loads(student_request.text)
+
+        message = [{
+            "submission" : allocation['1']['submission_id'],
+            "criteria" : criteria_id,
+            "message" : "to peer 1"
+        },
+        {
+            "submission" : allocation['2']['submission_id'],
+            "criteria" : criteria_id,
+            "message" : "to peer 2"
+        },
+        {
+            "submission" : allocation['3']['submission_id'],
+            "criteria" : criteria_id,
+            "message" : "to peer 3"
+        },
+        {
+            "submission" : allocation['4']['submission_id'],
+            "criteria" : criteria_id,
+            "message" : "to peer 4"
+        },
+        {
+            "submission" : allocation['5']['submission_id'],
+            "criteria" : criteria_id,
+            "message" : "to peer 5"
+        }]
         student_request = requests.post(BASE_URL + "/assignment/message", data = json.dumps(message), cookies = student["cookies"])
         print student_request.text
         assert(student_request.status_code == 200)

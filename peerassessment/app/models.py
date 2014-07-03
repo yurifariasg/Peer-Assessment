@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils import timezone
-import assignment_utils
 
 # Place our models here
 
@@ -51,10 +50,13 @@ class Message(PAModel):
         This class holds information regarding student message on an assignment.
     """
     date = dbmodels.DateTimeField(auto_now = True)
-    owner = dbmodels.ForeignKey('Student', related_name="received_messages")
-    recipient = dbmodels.ForeignKey('Student', related_name="sent_messages")
+    owner = dbmodels.ForeignKey('Student', related_name="sent_messages")
+    submission = dbmodels.ForeignKey('Submission')
     criteria = dbmodels.ForeignKey('AssignmentCriteria')
     text = dbmodels.CharField(max_length=500)
+    # This property tells that this message is from the conversation
+    # Between submission_owner -> related_peer
+    related_peer = dbmodels.ForeignKey('Student', related_name="related_messages")
 
 class Grade(PAModel):
     """
@@ -63,8 +65,8 @@ class Grade(PAModel):
     grade = dbmodels.FloatField( \
         validators = [MinValueValidator(0.0), MaxValueValidator(10.0)])
     assignment = dbmodels.ForeignKey('Assignment')
-    owner = dbmodels.ForeignKey('Student', related_name="sent_grades")
-    student = dbmodels.ForeignKey('Student', related_name="received_grades")
+    owner = dbmodels.ForeignKey('Student')
+    submission = dbmodels.ForeignKey('Submission')
     criteria = dbmodels.ForeignKey('AssignmentCriteria')
 
 class Allocation(PAModel):
@@ -82,6 +84,7 @@ class Allocation(PAModel):
 
     class Meta:
         unique_together = (("student","assignment"),)
+
 
 class Assignment(PAModel):
     """
@@ -119,7 +122,8 @@ class Assignment(PAModel):
             new_stage = "Submission"
 
         if new_stage != "Submission" and not self.has_allocations():
-            assignment_utils.allocate(self)
+            import app.services.assignments as assignment_service
+            assignment_service.allocate(self)
 
         self.stage = new_stage
 

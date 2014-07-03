@@ -1,5 +1,5 @@
 from apscheduler.scheduler import Scheduler
-import assignment_updater as AssignmentUpdater
+import services.assignments as assignment_service
 import peerassessment.settings as settings
 
 class JobManager(object):
@@ -19,7 +19,7 @@ class JobManager(object):
         @cls.sched.interval_schedule(minutes=settings.JOB_UPDATER_TIMER)
         def scheduled_job():
             print "Checking for Assignments that needs to be updated"
-            AssignmentUpdater.update_assignments()
+            assignment_service.update_assignments()
 
     @classmethod
     def shutdown(cls): # Not being called

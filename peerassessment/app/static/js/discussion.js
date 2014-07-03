@@ -91,14 +91,11 @@ $('.btn-send').click(function() {
     btn.append(animation);
     animation.show();
 
-    content = {
-        "assignment_id" : $("#assignment").data('id'),
-        "messages" : [{
-            "peer" : parent.data('peer'),
-            "criteria" : parent.data('criteria'),
-            "message" : message
-        }]
-    };
+    content = [{
+        "submission" : parent.data('submission'),
+        "criteria" : parent.data('criteria'),
+        "message" : message
+    }];
 
     $.post("/assignment/message", JSON.stringify(content),
      function( data, txtStatus, xhr ) {

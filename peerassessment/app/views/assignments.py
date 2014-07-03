@@ -2,6 +2,32 @@ from common import *
 
 # Endpoints here are related to assignments.
 
+@require_http_methods(["GET"])
+@login_required_ajax()
+@types_required(["student"])
+@ajax_endpoint
+def allocation(request, assignment_id):
+    """
+        Gets the submissions for a user's peers on a given assignment.
+    """
+    assignment = Assignment.objects.get(pk = assignment_id)
+    allocation = Allocation.objects.get(\
+        student = request.user.student,\
+        assignment = assignment)
+
+    # Get submissions for each peer
+    submissions = assignment_service.get_submissions_of_peers(assignment = assignment, allocation = allocation)
+
+    # Filter to show only Submission ID, URL and Peer Num
+    for peer_num in submissions.keys():
+        submission = submissions[peer_num]
+        submissions[peer_num] = {\
+            "submission_id" : submission.id, \
+            "url" : submission.url \
+        }
+
+    return submissions
+
 @require_http_methods(["POST"])
 @login_required_ajax()
 @types_required(["student"])
@@ -31,14 +57,7 @@ def submit(request):
     except:
         raise ValidationError({"assignment_id" : ["Not found."]})
 
-    submission = Submission( \
-        student = request.user.student, \
-        assignment = assignment, \
-        url = url \
-        )
-
-    submission.full_clean()
-    submission.save()
+    assignment_service.create_submission(request.user.student, assignment, url)
 
     return { }
 
@@ -90,6 +109,7 @@ def grade(request):
     requesting_student = request.user.student
     assignment = Assignment.objects.get(id=assignment_id)
     allocation = Allocation.objects.get(assignment=assignment, student=requesting_student)
+    submissions = assignment_service.get_submissions_of_peers(assignment, allocation)
 
     grades = []
 
@@ -103,30 +123,8 @@ def grade(request):
             criteria_id = peer_grade.get("criteria", -1)
             criteria = AssignmentCriteria.objects.get(id = criteria_id)
 
-            existing_grade = Grade.objects.filter(\
-                assignment = assignment, \
-                owner = requesting_student, \
-                student = get_peer(peer_id, allocation), \
-                criteria = criteria \
-            ).first()
-
-            if existing_grade:
-                grade = existing_grade
-                grade.grade = peer_grade.get("grade")
-            else:
-                grade = Grade( \
-                    grade = peer_grade.get("grade"), \
-                    assignment = assignment, \
-                    owner = requesting_student, \
-                    student = get_peer(peer_id, allocation), \
-                    criteria = criteria \
-                )
-
-            grade.full_clean()
-            grades.append(grade)
-
-    for grade in grades:
-        grade.save()
+            assignment_service.create_or_update_grade(requesting_student, assignment,\
+                submissions[peer_id], criteria, peer_grade.get("grade"))
 
     return { }
 
@@ -180,30 +178,19 @@ def create(request):
     if abs(weight_sum - 1.0) > 0.001:
         raise ValidationError({"weight_sum" : [ "sum must be 1.0, it is " + str(weight_sum) ]})
 
+    assignment = None
     try:
         created_criterias = []
 
-        assignment = Assignment(
-            name = name, \
-            owner = request.user.professor, \
-            submission_end_date = submission_end_date, \
-            discussion_end_date = discussion_end_date, \
-            grading_end_date = grading_end_date, \
-            )
-        assignment.full_clean()
-        assignment.save()
+        assignment = assignment_service.create_or_update_assignment(name, \
+            request.user.professor, submission_end_date, discussion_end_date,\
+            grading_end_date)
 
         for criteria in criterias:
-            created_criteria = AssignmentCriteria(text = criteria["name"], weight = criteria["weight"], assignment = assignment)
+            created_criteria = assignment_service.create_or_update_criteria(\
+                criteria["name"], criteria["weight"], assignment)
 
-            created_criteria.full_clean()
-            created_criteria.save()
             created_criterias.append(created_criteria)
-
-        # TODO: Get Students from a discipline only
-        students = Student.objects.all()
-        assignment.student_set.add(*students)
-        assignment.save()
 
     except Exception as e:
         if (assignment != None and assignment.id != None):
@@ -288,19 +275,11 @@ def edit(request):
         assignment.save()
 
         for criteria in criterias:
-            if criteria.get("id"):
-                model_criteria = AssignmentCriteria.objects.get(id = criteria["id"])
-                model_criteria.text = criteria["name"]
-                model_criteria.weight = criteria["weight"]
-            else:
-                model_criteria = AssignmentCriteria(\
-                    text = criteria["name"], weight = criteria["weight"], assignment = assignment)
-
-            model_criteria.full_clean()
-            model_criteria.save()
+            model_criteria = assignment_service.create_or_update_criteria(\
+                criteria["name"], criteria["weight"], assignment, criteria.get("id"))
             edited_criterias.append(model_criteria)
 
-        # Now, delete criterias that were not send on the request
+        # Now, delete criterias that were not sent on the request
         all_model_assignment_criterias = AssignmentCriteria.objects.filter(assignment = assignment)
         for criteria in all_model_assignment_criterias:
             wasEdited = False
@@ -329,48 +308,45 @@ def edit(request):
 def send_messages(request):
     """
         Send messages to peers in an assignment's criteria.
-        It reseives a list of messages.
+        It receives a list of messages.
+        The related_peer property tells from which peer the conversation
+        is identified from the relation submission_owner <-> related_peer
+        If it is not specified, the related_peer will be the sender.
+        This means that the sender is commenting on somebody else submission.
+        This property should only be used IF the sender IS the owner of the submission.
         The content should be a json in the following format:
-        {
-            "assignment_id" : assignment_id,
-            "messages" : [{
-                "peer" : peer_id,
+        [
+            {
+                "submission" : submission_id,
                 "criteria" : criteria_id,
-                "message" : "message content"
-            }]
-        }
+                "message" : "message content",
+                "related_peer" : peer (1-5, Optional)
+            },
+            {
+                "submission" : submission_id,
+                "criteria" : criteria_id,
+                "message" : "message content",
+                "related_peer" : peer (1-5, Optional)
+            }
+        ]
     """
-    json_body = json.loads(request.body)
-    assignment_id = json_body.get("assignment_id")
+    messages = json.loads(request.body)
+    # Sort messages based on submission_id to increase algorithm efficiency later...
+    messages.sort(key=lambda x: x['submission'])
 
     parsed_messages = []
-    messages = json_body.get("messages", [])
-
-    assignment = Assignment.objects.get(id = assignment_id)
-    allocation = Allocation.objects.get( \
-        student = request.user.student, assignment = assignment)
-
-    def get_criteria(criteria_id):
-        criteria = AssignmentCriteria.objects.get(id = criteria_id)
-        assert(criteria.assignment == assignment)
-        return criteria
 
     for message in messages:
 
-        criteria = get_criteria(message.get("criteria"))
-        if criteria.assignment != assignment:
-            raise ValidationError({"criteria" : ["Criteria not from assignment."]})
+        submission = Submission.objects.get(id = message.get("submission"))
+        criteria = AssignmentCriteria.objects.get(id = message.get("criteria"))
 
-        message = Message( \
-            owner = request.user.student, \
-            recipient = get_peer(message.get("peer"), allocation), \
-            criteria = criteria, \
-            text = message.get("message", ""))
-        message.full_clean()
+        # Validate Criteria
+        message_service.validate_criteria(criteria, submission)
+        # Validate Sender
+        message_service.validate_message_sender(request.user.student, submission)
 
-        parsed_messages.append(message)
-
-    for parsed_message in parsed_messages:
-        parsed_message.save()
+        # Send Message
+        message_service.submit_message_to(message.get("message"), submission, criteria, request.user.student, message.get("related_peer"))
 
     return { }

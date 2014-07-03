@@ -18,6 +18,9 @@ from django.db.models import Q
 from django.core.urlresolvers import reverse
 import datetime
 from django.utils.timezone import utc, is_aware, make_aware
+import app.services.messages as message_service
+import app.services.assignments as assignment_service
+import traceback
 try:
     from functools import wraps
 except:
@@ -44,6 +47,8 @@ def ajax_endpoint(func):
         except ValidationError as e:
             return HttpResponse(json.dumps(e.message_dict), status = HTTP_400_BAD_REQUEST)
         except Exception as e:
+            # Print stacktrace to console (Unexpected Error...)
+            traceback.print_exc()
             return HttpResponse(json.dumps({"error" : e.message}), status = HTTP_500_INTERNAL_SERVER_ERROR)
     return func_wrapper
 

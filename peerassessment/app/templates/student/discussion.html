@@ -57,7 +57,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="pull-right">
-                                <button type="button" class="btn btn-default btn-activity" onclick="window.open('{{ submissions|access:peer }}')">Atividade</button>
+                                <button type="button" class="btn btn-default btn-activity" onclick="window.open('{{ submissions|access:peer|getattribute:"url" }}')">Atividade</button>
                             </div>
                         </div>
                     </div>
@@ -85,7 +85,7 @@
 
                             {% block discussion-input %}
 
-                            <div class="comment-input input-group" data-criteria="{{criteria_messages.criteria.id}}" data-peer="{{peer}}">
+                            <div class="comment-input input-group" data-criteria="{{criteria_messages.criteria.id}}" data-submission="{{submissions|access:peer|getattribute:"id"}}">
                                     <textarea type="comment" class="form-control" placeholder="Comment..."></textarea>
                                     <span class="input-group-btn">
                                         <button class="btn btn-default btn-send" type="button">
