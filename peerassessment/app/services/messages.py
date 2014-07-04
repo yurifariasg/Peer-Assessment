@@ -2,8 +2,8 @@ from common import *
 
 def is_peer(student, allocation):
     """
+        Checks if the student is in the given allocation.
     """
-
     if student == allocation.peer1 or\
         student == allocation.peer2 or\
         student == allocation.peer3 or\
@@ -14,6 +14,7 @@ def is_peer(student, allocation):
 
 def validate_message_sender(sender, target_submission):
     """
+        Checks if the sender is allowed to send a message to the given submission.
     """
 
     # Check if he is owner
@@ -33,6 +34,7 @@ def validate_message_sender(sender, target_submission):
 
 def validate_criteria(criteria, target_submission):
     """
+        Validates the given criteria regarding the submission it will be placed.
     """
     if criteria.assignment != target_submission.assignment:
         raise ValidationError({"criteria" : ["Criteria not from assignment."]})
@@ -73,7 +75,7 @@ def submit_message_to(message, submission, criteria, sender, related_peer):
 
 def get_messages_for(submission, criteria, related_peer):
     """
-        Gets all messages of a given submission and criteria
+        Gets all messages of a given submission, criteria and related_peer.
     """
     messages = Message.objects.filter(\
         submission = submission, criteria = criteria, \

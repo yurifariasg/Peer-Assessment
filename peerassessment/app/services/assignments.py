@@ -2,8 +2,9 @@ from common import *
 
 def create_or_update_criteria(description, weight, assignment, id = None):
     """
+        Creates or updates an existing criteria if id is passed.
+        The criteria is created/updated using the given data.
     """
-
     if not id:
         # Creating
         criteria = AssignmentCriteria(text = description, weight = weight,\
@@ -22,6 +23,8 @@ def create_or_update_criteria(description, weight, assignment, id = None):
 def create_or_update_assignment(name, owner, submission_end_date, discussion_end_date,\
         grading_end_date, id = None):
     """
+        Creates or updates an existing assignment if id is passed.
+        The assignment is created/updated using the given data.
     """
     if not id:
         # Creating
@@ -54,6 +57,10 @@ def create_or_update_assignment(name, owner, submission_end_date, discussion_end
 
 def create_or_update_grade(grade_giver, assignment, submission, criteria, grade_value):
     """
+        Creates or updates an existing grade.
+        A grade will be updated if the system already have a grade with the same
+        the assignment, owner, submission and criteria.
+        The grade is created and updated using the given data.
     """
     existing_grade = Grade.objects.filter(\
         assignment = assignment, \
@@ -80,7 +87,7 @@ def create_or_update_grade(grade_giver, assignment, submission, criteria, grade_
 
 def get_submissions_of_peers(assignment, allocation):
     """
-
+        Gets the submissions of the peers from the given allocation.
     """
     return {
         1: Submission.objects.get(assignment = assignment, student = allocation.peer1),
@@ -90,14 +97,21 @@ def get_submissions_of_peers(assignment, allocation):
         5: Submission.objects.get(assignment = assignment, student = allocation.peer5)
     }
 
-def create_submission(owner, assignment, url):
+def create_or_update_submission(owner, assignment, url):
     """
-        Create a submission with the given parameters.
+        Create or updates a submission with the given parameters.
+        A submission is updated if there already exists a submission
+        with the same owner and assignment.
     """
-    submission = Submission( \
-        student = owner, \
-        assignment = assignment, \
-        url = url)
+    submission = Submission.objects.filter(student = owner, assignment = assignment).first()
+
+    if submission:
+        submission.url = url
+    else:
+        submission = Submission( \
+            student = owner, \
+            assignment = assignment, \
+            url = url)
 
     submission.full_clean()
     submission.save()
@@ -107,6 +121,7 @@ def create_submission(owner, assignment, url):
 def update_assignments():
     """
         Checks for assignments that needs to be updated and perform update operations.
+        This updates is solely related to the STAGE of an assignment.
     """
     assignments = Assignment.objects.exclude( \
         stage="Closed")

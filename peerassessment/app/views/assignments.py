@@ -57,7 +57,7 @@ def submit(request):
     except:
         raise ValidationError({"assignment_id" : ["Not found."]})
 
-    assignment_service.create_submission(request.user.student, assignment, url)
+    assignment_service.create_or_update_submission(request.user.student, assignment, url)
 
     return { }
 

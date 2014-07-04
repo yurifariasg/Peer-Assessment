@@ -48,11 +48,6 @@ def test():
         print student_request.text
         assert(student_request.status_code == 200)
 
-        student_request = requests.post(BASE_URL + "/assignment/submit", data = json.dumps({"url" : "http://url.com", "assignment_id" : assignment_id}), cookies = student_cookies)
-
-        print student_request.text
-        assert(student_request.status_code == 400) # BadRequest
-
     # Wait for the assignment updates its stage to discussion....
     time.sleep(60)
 
